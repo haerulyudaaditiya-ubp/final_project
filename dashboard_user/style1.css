@@ -1,0 +1,465 @@
+/* Style untuk navbar dan link */
+.custom-navbar {
+    background-color: #01a0da;
+    margin-top: -10px;
+    padding: 5px 20px;
+}
+
+.custom-navbar .navbar-brand,
+.custom-navbar .navbar-nav .nav-link {
+    color: white;
+    font-weight: 500;
+}
+
+.custom-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-nav .nav-link {
+    margin-right: 20px;
+    padding: 5px 0;
+}
+
+.navbar-nav .nav-link.active {
+    border-bottom: 2px solid white;
+}
+
+/* Style untuk dropdown profil */
+.profile-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.dropdown-menu {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.dropdown-menu .dropdown-item {
+    text-align: center;
+    color: #0a2949;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #e2e6ea;
+}
+
+.dropdown-menu .dropdown-divider {
+    margin: 0.5rem 0;
+}
+
+
+/* ------------------------Halaman Home------------------------ */
+/* Hero Section Home */
+.hero-home {
+    background-image: url('img/bg.png');
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 75vh; /* Tinggi dikurangi menjadi 75% dari viewport */
+    text-align: left; /* Teks rata kiri */
+    padding: 20px 30px; /* Menambahkan padding atas untuk sedikit menggeser konten */
+}
+
+.hero-text {
+    max-width: 80%; /* Lebar kontainer teks */
+    margin: 0; /* Menghilangkan margin otomatis */
+}
+
+.hero-text h1 {
+    font-weight: bolder; /* Membuat teks lebih tebal */
+    line-height: 1.2; /* Menyesuaikan jarak antar baris */
+    font-size: 2.8rem; /* Menyesuaikan ukuran teks */
+}
+
+.hero-text p {
+    font-size: 1.1rem; /* Ukuran teks paragraf */
+    margin-top: 10px; /* Memberikan jarak atas */
+}
+
+.hero-text a.btn {
+    margin-top: 15px; /* Memberikan jarak tombol dengan teks */
+}
+
+
+
+/* Mengatur container card Service di halaman home*/
+.container {
+    display: flex;
+    justify-content: space-around; /* Mengatur jarak antar card */
+    gap: 20px; /* Menambahkan jarak antar card */
+    flex-wrap: wrap; /* Agar card bisa turun ke baris berikutnya jika layar sempit */
+    margin-top: 20px;
+}
+
+/* Mengatur styling card  Service di halaman home*/
+.card {
+    width: 18rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Mengatur tampilan gambar di card  Service di halaman home*/
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Mengatur style body card Service di halaman home */
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Style tombol dalam card Service di halaman home */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+/* Header Section di halaman Home */
+.header {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header div {
+    width: 20%;
+}
+.header div h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.header div p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.header div i {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 10px; /* Jarak antara ikon dan teks */
+    font-size: 32px;
+}
+
+.bg-custom1 {
+    background-color: #0e81de;
+}
+/* -----------------------------Akhir Halaman Home------------------------- */
+
+
+/* -------------------------tentang Kita------------------------- */
+/* according */
+.con h2 {
+    text-align: center;
+  }  
+
+.header1 {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.header1 div {
+    width: 20%;
+}
+.header1 div h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.header1 div p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.header1 div i {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 10px; /* Jarak antara ikon dan teks */
+    font-size: 32px;
+}
+
+/* Mengatur warna latar belakang accordion */
+.accordion-button {
+    background-color: lightgrey;
+    color: #000; /* Agar teks terlihat jelas */
+}
+
+/* Mengatur warna saat accordion aktif/dibuka */
+.accordion-button:not(.collapsed) {
+    background-color: #d3d3d3; /* Sedikit lebih gelap dari lightgrey */
+}
+
+/* Mengatur warna latar belakang isi accordion */
+.accordion-body {
+    background-color: lightgrey;
+}
+/* -------------------------akhir tentang Kita------------------------- */
+
+/* --------------------------Hero Section Armada ------------------------------------------*/
+.hero-armada {
+    background-image: url('img/bg.png');
+    background-size: cover;
+    background-position: center;
+    height: 30vh; /* Ukuran lebih kecil untuk halaman armada */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+    padding-right: 2rem;
+    padding-left: 2rem;
+}
+
+/* buton card title */
+.btn-orange {
+    background-color: orange;
+    color: white;
+  }
+
+  .hero-text {
+    max-width: 600px;
+    color: #000000;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: #ff0606;
+    font-weight: bold;
+    margin: 0;
+}
+
+.hero-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.hero-description {
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin: 0;
+    color: #000000;
+}
+
+.title-underline {
+    display: inline-block; 
+    padding-bottom: 8px; 
+    border-bottom: 2px solid #333; 
+  }
+  
+  .card {
+    background-color: #001f3f !important; 
+    color: white !important;
+}
+
+.container .card-text, .container .card-title {
+    color: white;
+  }
+
+  .container .card-body i {
+    color: rgb(22, 242, 253);
+  }
+
+ 
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-img-top {
+    height: 200px; /* Sesuaikan tinggi gambar agar konsisten */
+    object-fit: cover;
+    width: 100%;
+}
+
+/* --------------------------------Akhir Armada------------------------------- */
+
+/* ------------------------------kontak---------------------------------------- */
+.contact-section {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.contact-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.contact-title span {
+    color: #007bff; /* Warna biru */
+}
+
+.btn-submit {
+    background-color: #003366; /* Warna biru gelap */
+    color: white;
+    border-radius: 25px;
+    padding: 10px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-submit:hover {
+    background-color: #002244; /* Biru lebih gelap untuk efek hover */
+}
+/* ------------------------------akhir kontak---------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Media Query untuk Layar Mobile */
+@media (max-width: 576px) {
+    .top-header {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    .contact-info, .marquee, .social-media {
+        text-align: center;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem;
+    }
+
+    .carousel-background {
+        max-width: 100%;
+    }
+
+    .card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Media Query untuk Layar Laptop */
+@media (min-width: 768px) and (max-width: 1200px) {
+    .hero-text {
+        max-width: 50%;
+        text-align: right;
+        padding: 1.5rem;
+    }
+    
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-text p {
+        font-size: 1rem;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+/* Formulir Reservasi */
+.reservation-container {
+    max-width: 500px; /* Lebar maksimum formulir */
+    margin: 50px auto; /* Pusatkan formulir di halaman */
+    padding: 20px; /* Ruang di dalam formulir */
+    background-color: #f9f9f9; /* Warna latar belakang formulir */
+    border: 1px solid #ddd; /* Garis border */
+    border-radius: 8px; /* Sudut membulat */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan untuk efek kedalaman */
+}
+
+/* Styling untuk label */
+.reservation-container label {
+    display: block; /* Membuat label berada di baris terpisah */
+    margin: 15px 0 5px; /* Jarak atas dan bawah */
+    font-weight: bold; /* Membuat label lebih tebal */
+    color: #333; /* Warna teks label */
+}
+
+/* Styling untuk elemen input, select, dan textarea di formulir reservasi */
+.reservation-container input,
+.reservation-container select,
+.reservation-container textarea {
+    width: 100%; /* Lebar penuh */
+    padding: 10px; /* Ruang dalam */
+    margin-bottom: 15px; /* Jarak bawah untuk spasi antar elemen */
+    border: 1px solid #ddd; /* Garis border */
+    border-radius: 4px; /* Sudut membulat */
+    font-size: 16px; /* Ukuran font */
+    background-color: #f2f2f2; /* Warna latar belakang */
+    color: #333; /* Warna teks */
+}
+
+/* Styling untuk grup radio button */
+.reservation-container .radio-group {
+    display: flex; /* Mengatur elemen dalam grup menjadi baris */
+    gap: 20px; /* Jarak antar elemen dalam grup */
+    margin: 10px 0; /* Jarak vertikal */
+}
+
+/* Styling untuk tombol di formulir reservasi */
+.button-container button {
+    width: 100%; /* Lebar penuh */
+    background-color: #6c63ff; /* Warna latar belakang tombol */
+    color: white; /* Warna teks tombol */
+    font-size: 16px; /* Ukuran font */
+    padding: 10px; /* Ruang dalam tombol */
+    border: none; /* Tanpa border */
+    border-radius: 4px; /* Sudut membulat */
+    cursor: pointer; /* Mengubah cursor saat hover */
+    transition: background-color 0.3s ease; /* Efek transisi pada hover */
+}
+
+/* Efek hover pada tombol */
+.button-container button:hover {
+    background-color: #574bce; /* Warna latar belakang saat hover */
+}
