@@ -7,8 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_P
     
     if ($_POST['email'] === $valid_email && $_POST['password'] === $valid_password) {
         $_SESSION['loggedin'] = true;
+        $_SESSION['role'] = 'user';
         $_SESSION['email'] = $_POST['email'];
-        header("Location: dashboard.php");
+        header("Location: new_user/dashboard.php");
         exit();
     } else {
         $_SESSION['error'] = "Gagal login";

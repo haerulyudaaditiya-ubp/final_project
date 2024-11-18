@@ -132,6 +132,23 @@ $kategori = isset($_GET['kategori']) ? $_GET['kategori'] : 'tanpa-supir';
       <!-- Card 6 -->
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm h-100 service-card">
+          <img src="img/innova-reborn.png" class="card-img-top" alt="innova-reborn">
+          <div class="card-body text-center">
+            <h5 class="card-title">Innova Reborn</h5>
+            <p class="text-warning">Mulai dari Rp700rb/hari</p>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-gas-pump"></i> Bensin</li>
+              <li><i class="fas fa-users"></i> 7 Seater</li>
+              <li><i class="fa-solid fa-calendar-days"></i> 2015</li>
+              <li><i class="fas fa-cogs"></i> Manual</li>
+            </ul>
+            <a href="login.php" class="btn btn-warning">Booking</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card 7 -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100 service-card">
           <img src="img/fortuner.png" class="card-img-top" alt="Fortuner">
           <div class="card-body text-center">
             <h5 class="card-title">Fortuner</h5>
