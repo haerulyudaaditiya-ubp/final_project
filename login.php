@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Memulai session hanya jika belum dimulai
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_POST['password'])) {
     $valid_email = 'admin@admin.com';
@@ -9,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_P
         $_SESSION['loggedin'] = true;
         $_SESSION['role'] = 'user';
         $_SESSION['email'] = $_POST['email'];
-        header("Location: new_user/dashboard.php");
+        header("Location: new_user/index-user.php");
         exit();
     } else {
         $_SESSION['error'] = "Gagal login";
@@ -23,7 +25,10 @@ if (isset($_SESSION['error'])) {
     $error = $_SESSION['error'];
     unset($_SESSION['error']); // Hapus error dari sesi
 }
+?>
 
+<?php
+$hide_navbar = true;
 require 'header.php';
 ?>
 

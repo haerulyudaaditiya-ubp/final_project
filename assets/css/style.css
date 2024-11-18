@@ -593,7 +593,7 @@ footer .social-icons a:hover {
 
 
 .contact-us-section.contact-us-hotline {
-  background-image: url('img/servicebg.jpeg'); /* Ganti dengan path gambar Anda */
+  background-image: url('../../img/servicebg.jpeg'); /* Ganti dengan path gambar Anda */
   background-size: cover; /* Mengatur gambar agar menutupi seluruh elemen */
   background-position: center; /* Posisikan gambar di tengah */
   background-repeat: no-repeat; /* Jangan ulangi gambar */

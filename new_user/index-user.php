@@ -5,10 +5,7 @@ require '../header.php';
 ?>
 
 <body>
-
-  <!-- Navbar -->
   
-
   <!-- Carousel -->
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
@@ -48,8 +45,6 @@ require '../header.php';
       <span class="sr-only">Next</span>
     </a>
   </div>
-
-  <!-- <h1><?= $_SESSION['role'] ?></h1> -->
 
   <!-- Features Section -->
   <div class="container my-5">
