@@ -1,124 +1,180 @@
-<?php
-require 'header.php';
+<?php 
+require 'includes/header.php';
 ?>
 
-  <!-- Carousel -->
-  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-      <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="img/bg1.jpg" class="d-block w-100" alt="Gambar 1">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Welcome to Our Website</h5>
-          <p class="text-primary font-weight-bold">We offer the best services for your needs.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="img/bg3.png" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Professional Team</h5>
-          <p class="text-primary font-weight-bold">Our team is highly skilled and experienced.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="img/bg2.jpg" class="d-block w-100" alt="...">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Contact Us Today</h5>
-          <p class="text-primary font-weight-bold">We are here to assist you with any inquiries.</p>
-        </div>
-      </div>
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
-
-  <!-- Features Section -->
-  <div class="container my-5">
-    <div class="row text-center">
-      <div class="col-lg-3">
-        <i class="fas fa-headset icon-style"></i>
-        <h3>Hotline 24/7</h3>
-        <p>
-          Kami Siap membantu untuk memenuhi semua kebutuhan layanan transportasi Anda. Hubungi <a href="tel:0818-0490-1510">0818-0490-1510</a> untuk pusat bantuan, informasi, maupun pemesanan.
-        </p>
-      </div>
-      <div class="col-lg-3">
-        <i class="fas fa-map-marker-alt icon-style"></i>
-        <h3>Area Layanan</h3>
-        <p>
-          Booking kendaraan jadi lebih mudah dengan dukungan jaringan luas yang tersebar di 5 Kabupaten/Kota Besar di Indonesia.
-        </p>
-      </div>
-      <div class="col-lg-3">
-        <i class="fas fa-shield-alt icon-style"></i>
-        <h3>Proteksi</h3>
-        <p>
-          Demi ketenangan & rasa aman selama perjalanan, kami melindungi Anda dengan proteksi asuransi & jaminan kondisi armada yang selalu prima.
-        </p>
-      </div>
-      <div class="col-lg-3">
-        <i class="fas fa-car icon-style"></i>
-        <h3>Beragam Jenis</h3>
-        <p>
-          Penuhi kebutuhan perjalanan Anda dengan berbagai macam jenis kendaraan di PT Karawang Indah Transport. Mulai dari city car, SUV, LMPV, Sedan, dll.
-        </p>
-      </div>
+<!-- Hero Section -->
+<div class="hero-section position-relative" data-aos="fade-in" data-aos-duration="1000" 
+     style="background: url('img/background.jpg') no-repeat center bottom/cover; height: 100vh;">
+  <div class="overlay" style="background-color: rgba(0, 0, 0, 0.6); position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+  <div class="hero-content text-center text-light position-relative" style="z-index: 2; padding-top: 15%;">
+    <h1 class="fw-bold" 
+        style="font-size: 3rem;" 
+        data-aos="zoom-in" 
+        data-aos-duration="1500">
+      Sewa Mobil <span style="color: #f39c12;">Mudah</span>, <br> Perjalanan Anda Lebih Nyaman
+    </h1>
+    <p class="lead mt-3" data-aos="fade-up" data-aos-duration="1200" style="font-size: 1.2rem;">
+      Kami memberikan pengalaman terbaik dalam menyewa kendaraan dengan harga terjangkau dan layanan prima.
+    </p>
+    <div class="d-flex justify-content-center mt-4" data-aos="zoom-in" data-aos-duration="1400">
+      <input type="text" class="form-control w-50 me-2" placeholder="Cari Mobil yang Tersedia..." style="border-radius: 5px;">
+      <a href="daftar_mobil.php" class="btn btn-warning fw-bold" style="box-shadow: 0px 4px 6px rgba(0,0,0,0.2); text-decoration: none;">Lihat Mobil →</a>
     </div>
   </div>
+</div>
 
-
-  <!-- Card Section -->
-  <div class="container mb-5">
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="card mb-4 index-card">
-          <img src="img/1.jpg" class="card-img-top" alt="...">
+<!-- Why Choose Us Section -->
+<section id="about" class="why-choose-us py-5" style="background-color: #fff;">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5" data-aos="fade-down" data-aos-duration="1000" style="color: #343a40;">Kenapa Harus Memilih <span style="color: #f39c12;">WJA Trans</span>?</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
+        <div class="card border-0 shadow-sm text-center h-100">
           <div class="card-body">
-            <h5 class="card-title"><i class="fas fa-cogs"></i> Service 1</h5>
-            <p class="card-text">Kami mengutamakan kenyamanan, keamanan, dan keselamatan. 
-              Dengan mengecek terlebih dahulu setiap bagian mobilnya.</p>
-            <a href="#" class="btn alert-primary"><i class="fas fa-arrow-right"></i> Learn More</a>
+            <i class="fas fa-user-tie fa-3x mb-3" style="color: #f39c12;"></i>
+            <h5 class="card-title fw-bold" style="color: #343a40;">Driver Berpengalaman</h5>
+            <p class="card-text" style="color: #495057;">Driver profesional siap memberikan pengalaman perjalanan terbaik untuk Anda.</p>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card mb-4 index-card">
-          <img src="img/2.jpg" class="card-img-top" alt="...">
+      <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
+        <div class="card border-0 shadow-sm text-center h-100">
           <div class="card-body">
-            <h5 class="card-title"><i class="fa-solid fa-key"></i> Service 2</h5>
-            <p class="card-text">Kami menawarkan pilihan untuk anda agar dapat menyewa dengan supir atau lepas kunci.</p>
-            <a href="#" class="btn alert-warning"><i class="fas fa-arrow-right"></i> Learn More</a>
+            <i class="fas fa-clock fa-3x mb-3" style="color: #f39c12;"></i>
+            <h5 class="card-title fw-bold" style="color: #343a40;">Layanan 24/7</h5>
+            <p class="card-text" style="color: #495057;">Kami siap melayani kebutuhan Anda kapan saja, di mana saja.</p>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card mb-4 index-card">
-          <img src="img/3.jpg" class="card-img-top" alt="...">
+      <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="600">
+        <div class="card border-0 shadow-sm text-center h-100">
           <div class="card-body">
-            <h5 class="card-title"><i class="fa-solid fa-car"></i> Service 3</h5>
-            <p class="card-text">Kami menawarkan berbagai banyak pilihan mobil mulai dari city car, LMPV, maupun travel.</p>
-            <a href="#" class="btn alert-warning"><i class="fas fa-arrow-right"></i> Learn More</a>
+            <i class="fas fa-car fa-3x mb-3" style="color: #f39c12;"></i>
+            <h5 class="card-title fw-bold" style="color: #343a40;">Mobil Terawat</h5>
+            <p class="card-text" style="color: #495057;">Armada kami selalu dalam kondisi prima untuk kenyamanan perjalanan Anda.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="800">
+        <div class="card border-0 shadow-sm text-center h-100">
+          <div class="card-body">
+            <i class="fas fa-dollar-sign fa-3x mb-3" style="color: #f39c12;"></i>
+            <h5 class="card-title fw-bold" style="color: #343a40;">Harga Terbaik</h5>
+            <p class="card-text" style="color: #495057;">Nikmati harga yang kompetitif tanpa mengorbankan kualitas layanan.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- footer -->
-  <?php
-  require 'footer.php';
-  ?>
+</section>
 
+<section id="testimonials" class="py-5" style="background-color: #3e4651;">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-5 text-white" data-aos="fade-down" data-aos-duration="1000">
+      Apa Kata <span style="color: #f39c12;">Pelanggan Kami?</span>
+    </h2>
 
-</body>
+    <!-- Carousel -->
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <div class="row g-4 justify-content-center">
+            <!-- Testimoni 1 -->
+            <div class="col-md-4 col-12">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Andi Pratama</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Pelayanan sangat profesional, mobil dalam kondisi bersih dan nyaman. Pasti akan sewa di sini lagi!
+                </p>
+              </div>
+            </div>
+            <!-- Testimoni 2 (hidden on mobile) -->
+            <div class="col-md-4 d-none d-md-block">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Siti Rahmawati</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Harga terjangkau dengan pilihan mobil yang beragam. Proses booking juga sangat mudah.
+                </p>
+              </div>
+            </div>
+            <!-- Testimoni 3 (hidden on mobile) -->
+            <div class="col-md-4 d-none d-md-block">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Budi Santoso</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Driver yang ramah dan tepat waktu, perjalanan jadi menyenangkan. Sangat direkomendasikan!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-</html>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <div class="row g-4 justify-content-center">
+            <!-- Testimoni 4 -->
+            <div class="col-md-4 col-12">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Rina Susanti</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Mobilnya sangat terawat dan nyaman dipakai untuk perjalanan jauh. Layanan customer service juga cepat tanggap.
+                </p>
+              </div>
+            </div>
+            <!-- Testimoni 5 (hidden on mobile) -->
+            <div class="col-md-4 d-none d-md-block">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Agus Wirawan</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Pengalaman pertama sewa di sini dan sangat memuaskan. Proses pengambilan mobil cepat dan mudah.
+                </p>
+              </div>
+            </div>
+            <!-- Testimoni 6 (hidden on mobile) -->
+            <div class="col-md-4 d-none d-md-block">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+                <div class="mb-3">
+                  <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
+                </div>
+                <h5 class="fw-bold" style="color: #343a40;">Lutfi Andika</h5>
+                <p class="text-muted" style="margin: 0; min-height: 50px;">
+                  Harga sangat bersaing dengan kualitas layanan yang luar biasa. Sangat puas!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigasi Carousel -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev" style="background-color: rgba(0, 0, 0, 0.3); border-radius: 50%; width: 45px; height: 45px;">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next" style="background-color: rgba(0, 0, 0, 0.3); border-radius: 50%; width: 45px; height: 45px;">
+        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<?php 
+require 'includes/footer.php';
+?> 
