@@ -1,3 +1,4 @@
+<?php
 // Memulai sesi
 session_start();
 
@@ -14,7 +15,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Load file .env
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__)); // Menggunakan direktori utama proyek
 $dotenv->load();
 
 // Inisialisasi variabel
@@ -58,7 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $mail->Port = $_ENV['SMTP_PORT']; // Diambil dari .env
 
                         // Informasi pengirim
-                        $mail->setFrom('no-reply@yourdomain.com', 'Wejea Trans');
+                        $mail->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['SMTP_FROM_NAME']); // Email dan nama pengirim dari .env
+                        $mail->addReplyTo($_ENV['SMTP_REPLY_TO'], 'No Reply'); // Reply-To, jika diperlukan, diambil dari .env
                         $mail->addAddress($email); // Email penerima
 
                         // Konten email
@@ -71,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p>Tautan ini berlaku selama 1 jam.</p>
                             <p>Email ini dikirim secara otomatis. Mohon untuk tidak membalas email ini.</p>
                         ";
-
                         $mail->send();
                         $success = "Kami telah mengirimkan link reset password ke email Anda!";
                     } catch (Exception $e) {
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Tutup koneksi
 mysqli_close($conn);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
