@@ -190,7 +190,7 @@ mysqli_close($conn);
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="text-dark">Lupa password?</a>
+                    <a href="forgot_password.php" class="text-dark">Lupa password?</a>
                 </div>
                 <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>
                 <a href="../index.php" class="btn btn-secondary w-100 mb-3">Cancel</a>

@@ -1,13 +1,24 @@
 <?php
-// Memulai sesi jika belum dimulai
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+require_once 'config/config.php';
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT fullname FROM users WHERE id = '$user_id'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $user_data = mysqli_fetch_assoc($result);
+        $_SESSION['user_name'] = $user_data['fullname']; // Update nama pengguna di session
+    }
 }
 
 // Tentukan halaman aktif berdasarkan nama file
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,29 +132,35 @@ $current_page = basename($_SERVER['PHP_SELF']);
           <!-- Menu tambahan untuk user yang login -->
           <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
             <li class="nav-item dropdown">
-              <a 
+            <?php 
+            // Batasi nama pengguna hingga 20 huruf
+            $display_name = (strlen($_SESSION['user_name']) > 20) ? substr($_SESSION['user_name'], 0, 20) . '...' : $_SESSION['user_name'];
+            ?>
+            <a 
                 class="nav-link dropdown-toggle" 
                 href="#" 
                 id="navbarDropdown" 
                 role="button" 
                 data-bs-toggle="dropdown" 
                 aria-expanded="false"
-                style="color: #f8f9fa; font-size: 1.1rem; transition: color 0.3s ease;">
-                <?= htmlspecialchars($_SESSION['user_name']); ?>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #495057; border: none; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-                <li><a class="dropdown-item" href="./profile.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Profile</a></li>
-                <li><hr class="dropdown-divider" style="border-color: #6c757d;"></li>
-                <li><a class="dropdown-item" href="./logout.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Logout</a></li>
-              </ul>
+                style="color: #f8f9fa; font-size: 1.1rem; transition: color 0.3s ease;"
+                title="<?= htmlspecialchars($_SESSION['user_name']); ?>">
+                <?= htmlspecialchars($display_name); ?>
+            </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="background-color: #495057; border: none; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                    <li><a class="dropdown-item" href="./profile.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Profile</a></li>
+                    <li><a class="dropdown-item" href="./update_password.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Update Password</a></li>
+                    <li><a class="dropdown-item" href="./riwayat_sewa.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Riwayat Sewa</a></li>
+                    <li><hr class="dropdown-divider" style="border-color: #6c757d;"></li>
+                    <li><a class="dropdown-item" href="./logout.php" style="color: #ffffff; font-size: 1rem; transition: background-color 0.3s ease;">Logout</a></li>
+                </ul>
             </li>
-          <?php else: ?>
-            <li class="nav-item">
-              <a class="nav-link <?= ($current_page == 'login.php') ? 'active' : ''; ?>" href="./forms/login.php">Login</a>
-            </li>
-          <?php endif; ?>
+        <?php else: ?>
+    <li class="nav-item">
+        <a class="nav-link <?= ($current_page == 'login.php') ? 'active' : ''; ?>" href="./forms/login.php">Login</a>
+    </li>
+<?php endif; ?>
         </ul>
       </div>
     </div>
   </nav>
-

@@ -26,7 +26,7 @@ require 'includes/header.php'; // Memanggil header
           </li>
           <li class="mb-3">
             <strong>Email:</strong><br>
-            <a href="mailto:info@wja-trans.com" style="text-decoration: none; color: #f39c12;">info@wja-trans.com</a>
+            <a href="mailto:wejeatrans@gmail.com" style="text-decoration: none; color: #f39c12;">wejeatrans@gmail.com</a>
           </li>
           <li class="mb-3">
             <strong>WhatsApp:</strong><br>
