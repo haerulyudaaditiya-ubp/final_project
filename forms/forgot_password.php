@@ -1,17 +1,21 @@
-<?php
 // Memulai sesi
 session_start();
 
 // Impor koneksi database
 require '../config/config.php';
 
-// Impor PHPMailer
+// Impor PHPMailer dan autoload Composer
 require '../libs/PHPMailer-master/src/PHPMailer.php';
 require '../libs/PHPMailer-master/src/SMTP.php';
 require '../libs/PHPMailer-master/src/Exception.php';
+require '../vendor/autoload.php'; // Autoload Composer
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+// Load file .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 // Inisialisasi variabel
 $error = '';
@@ -46,16 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         // Konfigurasi SMTP
                         $mail->isSMTP();
-                        $mail->Host = 'smtp-relay.brevo.com'; // SMTP server Sendinblue
+                        $mail->Host = $_ENV['SMTP_HOST']; // Diambil dari .env
                         $mail->SMTPAuth = true;
-                        $mail->Username = '809076001@smtp-brevo.com'; // Email Anda di Sendinblue
-                        $mail->Password = 'tFxgWHkZTvVBRC9w'; // API key Sendinblue
+                        $mail->Username = $_ENV['SMTP_USER']; // Diambil dari .env
+                        $mail->Password = $_ENV['SMTP_PASS']; // Diambil dari .env
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = 587;
+                        $mail->Port = $_ENV['SMTP_PORT']; // Diambil dari .env
 
                         // Informasi pengirim
-                        $mail->setFrom('haerulyudaaditiya@gmail.com', 'Wejea Trans'); // Email Anda
-                        $mail->addReplyTo('no-reply@example.com', 'No Reply'); // No-reply email
+                        $mail->setFrom('no-reply@yourdomain.com', 'Wejea Trans');
                         $mail->addAddress($email); // Email penerima
 
                         // Konten email
@@ -86,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Tutup koneksi
 mysqli_close($conn);
-?>
 
 <!DOCTYPE html>
 <html lang="en">
