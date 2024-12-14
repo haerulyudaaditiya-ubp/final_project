@@ -1,6 +1,5 @@
 <?php
 // Koneksi ke database
-
 session_start();
 require '../config/config.php';
 
@@ -11,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm-password']);
+    $role = 'user'; // Set role default sebagai 'user'
 
     // Validasi data
     if (empty($fullname) || empty($phone) || empty($email) || empty($address) || empty($password) || empty($confirm_password)) {
@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Simpan ke database
-    $query = "INSERT INTO users (fullname, phone, email, address, password) 
-              VALUES ('$fullname', '$phone', '$email', '$address', '$hashedPassword')";
+    $query = "INSERT INTO users (fullname, phone, email, address, password, role) 
+              VALUES ('$fullname', '$phone', '$email', '$address', '$hashedPassword', '$role')";
 
     if (mysqli_query($conn, $query)) {
         $_SESSION['success'] = "Registrasi berhasil! Silakan login.";
@@ -77,14 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 mysqli_close($conn);
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - WJA Trans</title>
+    <title>Register - Wejea Trans</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">

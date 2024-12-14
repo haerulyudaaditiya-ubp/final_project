@@ -13,7 +13,7 @@ require 'includes/header.php'; // Memanggil header
     <div class="col-lg-8" data-aos="fade-up" data-aos-duration="1500">
       <!-- Konten -->
       <p style="font-size: 1rem; line-height: 1.6; color: #333;">
-        Terima kasih telah memilih layanan kami di <strong>WJA Trans</strong>. Berikut adalah syarat dan ketentuan dalam proses penyewaan kendaraan yang wajib dipahami dan disetujui oleh semua pelanggan:
+        Terima kasih telah memilih layanan kami di <strong>Wejea Trans</strong>. Berikut adalah syarat dan ketentuan dalam proses penyewaan kendaraan yang wajib dipahami dan disetujui oleh semua pelanggan:
       </p>
       <ol style="font-size: 1rem; line-height: 1.6; color: #333;">
         <li><strong>Persyaratan Umum:</strong> Penyewa harus berusia minimal 21 tahun dan memiliki SIM yang masih berlaku sesuai dengan jenis kendaraan yang disewa.</li>

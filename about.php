@@ -8,9 +8,9 @@ require 'includes/header.php';
     <div class="row align-items-center">
       <!-- Deskripsi -->
       <div class="col-md-7" data-aos="fade-right" data-aos-duration="1000">
-        <h2 class="fw-bold mb-3" style="color: #343a40;">Kenapa Memilih <span style="color: #f39c12;">WJA Trans</span>?</h2>
+        <h2 class="fw-bold mb-3" style="color: #343a40;">Kenapa Memilih <span style="color: #f39c12;">Wejea Trans</span>?</h2>
         <p style="color: #495057; font-size: 1.1rem; line-height: 1.8;">
-          <strong>WJA Trans</strong> adalah platform web terpercaya yang menyediakan layanan sewa mobil dengan <strong>kemudahan</strong>, <strong>keamanan</strong>, dan <strong>harga yang kompetitif</strong>. Kami menawarkan berbagai pilihan mobil, termasuk Honda CRV, Avanza Veloz, dan Pajero Sport, yang cocok untuk perjalanan bisnis atau liburan keluarga.
+          <strong>Wejea Trans</strong> adalah platform web terpercaya yang menyediakan layanan sewa mobil dengan <strong>kemudahan</strong>, <strong>keamanan</strong>, dan <strong>harga yang kompetitif</strong>. Kami menawarkan berbagai pilihan mobil yang cocok untuk perjalanan bisnis atau liburan keluarga.
         </p>
         <p style="color: #495057; font-size: 1.1rem; line-height: 1.8;">
           <i>Kami berkomitmen untuk memberikan pengalaman berkendara terbaik bagi Anda, dengan armada berkualitas tinggi dan layanan yang selalu siap membantu kapan saja.</i>

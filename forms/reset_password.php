@@ -5,6 +5,10 @@ require '../config/config.php';
 $error = '';
 $success = '';
 
+// Hapus token yang telah kadaluwarsa
+$delete_expired_tokens = "UPDATE users SET reset_token = NULL, reset_token_expire = NULL WHERE reset_token_expire < NOW()";
+mysqli_query($conn, $delete_expired_tokens);
+
 if (isset($_GET['token'])) {
     $token = mysqli_real_escape_string($conn, $_GET['token']);
 
@@ -54,12 +58,13 @@ if (isset($_GET['token'])) {
 mysqli_close($conn);
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - WJA Trans</title>
+    <title>Reset Password - Wejea Trans</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="../img/logo.png">
     <style>

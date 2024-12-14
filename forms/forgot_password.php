@@ -34,15 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Format email tidak valid!";
         } else {
             // Periksa apakah email ada di database
-            $query = "SELECT * FROM users WHERE email = '$email'";
+            $query = "SELECT * FROM users WHERE email = '$email' AND status = 'aktif'";
             $result = mysqli_query($conn, $query);
 
             if ($result && mysqli_num_rows($result) > 0) {
-                // Jika email ditemukan, buat token reset
-                $reset_token = bin2hex(random_bytes(32)); // Token unik
+                // Email ditemukan dan akun aktif
+                $user = mysqli_fetch_assoc($result);
+
+                // Lanjutkan dengan proses reset password
+                $reset_token = bin2hex(random_bytes(32)); // Buat token unik
                 $reset_link = "http://localhost/final_project/forms/reset_password.php?token=" . $reset_token;
 
-                // Simpan token reset ke database
+                // Simpan token dan waktu kedaluwarsa ke database
                 $update_query = "UPDATE users SET reset_token = '$reset_token', reset_token_expire = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = '$email'";
                 if (mysqli_query($conn, $update_query)) {
                     // Kirim email dengan PHPMailer
@@ -65,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         // Konten email
                         $mail->isHTML(true);
-                        $mail->Subject = 'Reset Password - WJA Trans';
+                        $mail->Subject = 'Reset Password - Wejea Trans';
                         $mail->Body = "
                             <p>Halo,</p>
                             <p>Kami menerima permintaan untuk mengatur ulang kata sandi Anda. Klik tautan berikut untuk melanjutkan:</p>
@@ -82,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = "Terjadi kesalahan saat memproses permintaan reset password.";
                 }
             } else {
-                $error = "Email tidak ditemukan!";
+                $error = "Email tidak ditemukan atau akun Anda tidak aktif.";
             }
         }
     }
@@ -97,7 +100,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password - WJA Trans</title>
+    <title>Lupa Password - Wejea Trans</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="../img/logo.png">

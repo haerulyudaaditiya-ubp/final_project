@@ -26,18 +26,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($result && mysqli_num_rows($result) > 0) {
                 $user = mysqli_fetch_assoc($result);
-
-                // Verifikasi password
-                if (password_verify($password, $user['password'])) {
-                    // Simpan data user ke sesi
-                    $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['user_name'] = $user['fullname'];
-
-                    // Redirect ke halaman dashboard
-                    header("Location: ../index.php");
-                    exit;
+            
+                // Cek status user
+                if ($user['status'] !== 'aktif') {
+                    $error = "Akun Anda tidak aktif. Silakan hubungi admin.";
                 } else {
-                    $error = "Email atau password tidak sesuai!";
+                    // Verifikasi password
+                    if (password_verify($password, $user['password'])) {
+                        // Simpan data user ke sesi
+                        $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['user_name'] = $user['fullname'];
+                        $_SESSION['user_role'] = $user['role']; // Tambahkan role ke sesi
+            
+                        // Redirect berdasarkan role
+                        if ($user['role'] === 'admin') {
+                            header("Location: ../admin/index.php"); // Admin diarahkan ke dashboard admin
+                        } else {
+                            header("Location: ../index.php"); // User diarahkan ke dashboard user
+                        }
+                        exit;
+                    } else {
+                        $error = "Email atau password tidak sesuai!";
+                    }
                 }
             } else {
                 $error = "Email atau password tidak sesuai!";
@@ -55,7 +65,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - WJA Trans</title>
+    <title>Login - Wejea Trans</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
@@ -183,13 +193,7 @@ mysqli_close($conn);
                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="rememberMe">
-                        <label class="form-check-label text-secondary" for="rememberMe">
-                            Remember me
-                        </label>
-                    </div>
+                <div class="mb-3 text-end">
                     <a href="forgot_password.php" class="text-dark">Lupa password?</a>
                 </div>
                 <button type="submit" class="btn btn-dark w-100 mb-3">Login</button>

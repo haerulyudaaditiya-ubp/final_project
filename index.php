@@ -17,7 +17,6 @@ require 'includes/header.php';
       Kami memberikan pengalaman terbaik dalam menyewa kendaraan dengan harga terjangkau dan layanan prima.
     </p>
     <div class="d-flex justify-content-center mt-4" data-aos="zoom-in" data-aos-duration="1400">
-      <input type="text" class="form-control w-50 me-2" placeholder="Cari Mobil yang Tersedia..." style="border-radius: 5px;">
       <a href="daftar_mobil.php" class="btn btn-warning fw-bold" style="box-shadow: 0px 4px 6px rgba(0,0,0,0.2); text-decoration: none;">Lihat Mobil →</a>
     </div>
   </div>
@@ -26,19 +25,20 @@ require 'includes/header.php';
 <!-- Why Choose Us Section -->
 <section id="about" class="why-choose-us py-5" style="background-color: #fff;">
   <div class="container">
-    <h2 class="text-center fw-bold mb-5" data-aos="fade-down" data-aos-duration="1000" style="color: #343a40;">Kenapa Harus Memilih <span style="color: #f39c12;">WJA Trans</span>?</h2>
+    <h2 class="text-center fw-bold mb-5" data-aos="fade-down" data-aos-duration="1000" style="color: #343a40;">Kenapa Harus Memilih <span style="color: #f39c12;">Wejea Trans</span>?</h2>
     <div class="row g-4">
+      <!-- Card 1 (diganti) -->
       <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="200">
-        <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card border-0 shadow-sm text-center h-100" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
           <div class="card-body">
-            <i class="fas fa-user-tie fa-3x mb-3" style="color: #f39c12;"></i>
-            <h5 class="card-title fw-bold" style="color: #343a40;">Driver Berpengalaman</h5>
-            <p class="card-text" style="color: #495057;">Driver profesional siap memberikan pengalaman perjalanan terbaik untuk Anda.</p>
+            <i class="fas fa-car-side fa-3x mb-3" style="color: #f39c12;"></i>
+            <h5 class="card-title fw-bold" style="color: #343a40;">Mobil Terbaru</h5>
+            <p class="card-text" style="color: #495057;">Kami menyediakan mobil-mobil terbaru dengan kondisi prima dan teknologi terbaru.</p>
           </div>
         </div>
       </div>
       <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="400">
-        <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card border-0 shadow-sm text-center h-100" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
           <div class="card-body">
             <i class="fas fa-clock fa-3x mb-3" style="color: #f39c12;"></i>
             <h5 class="card-title fw-bold" style="color: #343a40;">Layanan 24/7</h5>
@@ -47,7 +47,7 @@ require 'includes/header.php';
         </div>
       </div>
       <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="600">
-        <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card border-0 shadow-sm text-center h-100" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
           <div class="card-body">
             <i class="fas fa-car fa-3x mb-3" style="color: #f39c12;"></i>
             <h5 class="card-title fw-bold" style="color: #343a40;">Mobil Terawat</h5>
@@ -56,7 +56,7 @@ require 'includes/header.php';
         </div>
       </div>
       <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="800">
-        <div class="card border-0 shadow-sm text-center h-100">
+        <div class="card border-0 shadow-sm text-center h-100" style="box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);">
           <div class="card-body">
             <i class="fas fa-dollar-sign fa-3x mb-3" style="color: #f39c12;"></i>
             <h5 class="card-title fw-bold" style="color: #343a40;">Harga Terbaik</h5>
@@ -82,7 +82,7 @@ require 'includes/header.php';
           <div class="row g-4 justify-content-center">
             <!-- Testimoni 1 -->
             <div class="col-md-4 col-12">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -94,7 +94,7 @@ require 'includes/header.php';
             </div>
             <!-- Testimoni 2 (hidden on mobile) -->
             <div class="col-md-4 d-none d-md-block">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -106,7 +106,7 @@ require 'includes/header.php';
             </div>
             <!-- Testimoni 3 (hidden on mobile) -->
             <div class="col-md-4 d-none d-md-block">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -124,7 +124,7 @@ require 'includes/header.php';
           <div class="row g-4 justify-content-center">
             <!-- Testimoni 4 -->
             <div class="col-md-4 col-12">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -136,7 +136,7 @@ require 'includes/header.php';
             </div>
             <!-- Testimoni 5 (hidden on mobile) -->
             <div class="col-md-4 d-none d-md-block">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -148,7 +148,7 @@ require 'includes/header.php';
             </div>
             <!-- Testimoni 6 (hidden on mobile) -->
             <div class="col-md-4 d-none d-md-block">
-              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%;">
+              <div class="card testimonial-card border-0 shadow-sm text-center p-4" style="background-color: #fff; border-radius: 12px; height: 100%; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);">
                 <div class="mb-3">
                   <i class="fas fa-user-circle fa-3x" style="color: #f39c12;"></i>
                 </div>
@@ -177,4 +177,4 @@ require 'includes/header.php';
 
 <?php 
 require 'includes/footer.php';
-?> 
+?>  
