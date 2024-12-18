@@ -1,7 +1,10 @@
 <?php
 ob_start(); // Mulai output buffering
+session_start();
+
 require 'includes/header.php';
 require 'config/config.php';
+require 'classes/UpdatePassword.php';
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user_id'])) {
@@ -11,56 +14,50 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Inisialisasi variabel
-$success_message = '';
 $error_message = '';
+$success_message = '';
 
 // Jika form dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ambil input dari form
     $current_password = $_POST['current_password'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    // Validasi input kosong
-    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
-        $error_message = "Semua kolom harus diisi!";
-    } elseif (strlen($new_password) < 6) {
-        $error_message = "Password baru harus minimal 6 karakter!";
-    } elseif ($new_password !== $confirm_password) {
-        $error_message = "Password baru dan konfirmasi password tidak cocok!";
-    } else {
-        // Ambil password lama dari database
-        $user_id = $_SESSION['user_id'];
-        $query = "SELECT password FROM users WHERE id = '$user_id'";
-        $result = mysqli_query($conn, $query);
+    // Membuat objek UpdatePassword
+    $updatePassword = new UpdatePassword(
+        $conn,
+        $_SESSION['user_id'],
+        $current_password,
+        $new_password,
+        $confirm_password
+    );
 
-        if ($result && $row = mysqli_fetch_assoc($result)) {
-            if (!password_verify($current_password, $row['password'])) {
-                $error_message = "Password lama salah!";
+    // Validasi input
+    if ($updatePassword->validateInputs()) {
+        // Verifikasi password lama
+        if ($updatePassword->verifyCurrentPassword()) {
+            // Update password
+            if ($updatePassword->updatePassword()) {
+                $success_message = $updatePassword->success;
+                echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'forms/login.php';
+                    }, 3000); // Redirect setelah 3 detik
+                </script>";
             } else {
-                // Update password di database
-                $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-                $update_query = "UPDATE users SET password = '$hashed_password' WHERE id = '$user_id'";
-
-                if (mysqli_query($conn, $update_query)) {
-                    $success_message = "Password berhasil diperbarui! Anda akan diarahkan ke halaman login.";
-                    echo "<script>
-                        setTimeout(function() {
-                            window.location.href = 'forms/login.php';
-                        }, 3000); // Redirect setelah 3 detik
-                    </script>";
-                } else {
-                    $error_message = "Terjadi kesalahan saat memperbarui password.";
-                }
+                $error_message = $updatePassword->error;
             }
         } else {
-            $error_message = "Terjadi kesalahan. Data pengguna tidak ditemukan.";
+            $error_message = $updatePassword->error;
         }
+    } else {
+        $error_message = $updatePassword->error;
     }
 }
 
 ob_end_flush(); // Akhiri output buffering
 ?>
-
 
 <div class="container py-5">
   <div class="row justify-content-center">

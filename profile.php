@@ -2,6 +2,7 @@
 ob_start();
 require 'includes/header.php';
 require 'config/config.php';
+require 'classes/Profile.php'; // Menyertakan kelas Profile
 
 // Pastikan pengguna sudah login
 if (!isset($_SESSION['user_id'])) {
@@ -10,58 +11,27 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Ambil data pengguna dari database
 $user_id = $_SESSION['user_id'];
-$query = "SELECT fullname, phone, email, address, created_at FROM users WHERE id = '$user_id'";
-$result = mysqli_query($conn, $query);
+$profile = new Profile($conn, $user_id);
 
-// Periksa apakah data pengguna ditemukan
-if (!$result || mysqli_num_rows($result) == 0) {
+// Ambil data pengguna dari database
+$user = $profile->getUserData();
+if (!$user) {
     $_SESSION['error'] = "Data profil tidak ditemukan.";
     header("Location: ../index.php");
     exit;
 }
 
-$user = mysqli_fetch_assoc($result);
-
 // Proses penyimpanan jika form dikirim
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $fullname = $_POST['fullname'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
 
-    // Validasi sederhana
-    if (empty($fullname) || empty($phone) || empty($email) || empty($address)) {
-        $_SESSION['error'] = "Semua field harus diisi!";
+    if ($profile->updateUserProfile($fullname, $phone, $email, $address)) {
         header("Location: profile.php");
         exit;
-    }
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['error'] = "Format email tidak valid!";
-        header("Location: profile.php");
-        exit;
-    }
-
-    if (!ctype_digit($phone)) {
-        $_SESSION['error'] = "Nomor telepon harus berupa angka!";
-        header("Location: profile.php");
-        exit;
-    }
-
-    // Update data di database
-    $update_query = "UPDATE users SET fullname='$fullname', phone='$phone', email='$email', address='$address' WHERE id='$user_id'";
-    if (mysqli_query($conn, $update_query)) {
-        // Perbarui session dengan nama lengkap terbaru
-        $_SESSION['user_name'] = $fullname;
-
-        // Beri pesan sukses
-        $_SESSION['success'] = "Profil berhasil diperbarui!";
-        header("Location: profile.php");
-        exit;
-    } else {
-        $_SESSION['error'] = "Terjadi kesalahan saat menyimpan perubahan.";
     }
 }
 
@@ -81,20 +51,7 @@ ob_end_flush();
           <!-- Body Kartu -->
           <div class="card-body p-4">
             <!-- Menampilkan Pesan Error atau Sukses -->
-            <?php if (isset($_SESSION['error'])): ?>
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <?= htmlspecialchars($_SESSION['error']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-              <?php unset($_SESSION['error']); ?>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['success'])): ?>
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?= htmlspecialchars($_SESSION['success']); ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-              <?php unset($_SESSION['success']); ?>
-            <?php endif; ?>
+            <?php $profile->displayMessage(); ?>
 
             <!-- Form Profil -->
             <form method="POST" action="profile.php">
@@ -131,4 +88,4 @@ ob_end_flush();
   </div>
 </section>
 
-<?php require 'includes/footer.php'; ?>
+<?php require 'includes/footer.php'; ?> 

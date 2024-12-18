@@ -1,74 +1,27 @@
 <?php
-// Koneksi ke database
 session_start();
 require '../config/config.php';
+require '../classes/UserRegistration.php'; // Memanggil kelas UserRegistration
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
-    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $password = mysqli_real_escape_string($conn, $_POST['password']);
-    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm-password']);
-    $role = 'user'; // Set role default sebagai 'user'
+    // Mengambil data dari form
+    $fullname = $_POST['fullname'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $address = $_POST['address'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm-password'];
 
-    // Validasi data
-    if (empty($fullname) || empty($phone) || empty($email) || empty($address) || empty($password) || empty($confirm_password)) {
-        $_SESSION['error'] = "Semua field harus diisi!";
-        header("Location: registrasi.php");
-        exit;
-    }
+    // Membuat objek dari kelas UserRegistration
+    $registration = new UserRegistration($conn, $fullname, $phone, $email, $address, $password, $confirm_password);
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $_SESSION['error'] = "Format email tidak valid!";
-        header("Location: registrasi.php");
-        exit;
-    }
-
-    if (!ctype_digit($phone) || strlen($phone) > 15) {
-        $_SESSION['error'] = "Nomor telepon harus berupa angka dan maksimal 15 digit!";
-        header("Location: registrasi.php");
-        exit;
-    }
-
-    // Cek duplikasi data
-    $checkDuplicate = mysqli_query($conn, "SELECT id, email, phone FROM users WHERE phone = '$phone' OR email = '$email'");
-    if (mysqli_num_rows($checkDuplicate) > 0) {
-        $duplicate = mysqli_fetch_assoc($checkDuplicate);
-        if ($duplicate['phone'] === $phone) {
-            $_SESSION['error'] = "Nomor telepon sudah digunakan!";
-        } elseif ($duplicate['email'] === $email) {
-            $_SESSION['error'] = "Email sudah digunakan!";
-        }
-        header("Location: registrasi.php");
-        exit;
-    }
-
-    if (strlen($password) < 6) {
-        $_SESSION['error'] = "Password harus minimal 6 karakter!";
-        header("Location: registrasi.php");
-        exit;
-    }
-
-    if ($password !== $confirm_password) {
-        $_SESSION['error'] = "Password dan konfirmasi password tidak cocok!";
-        header("Location: registrasi.php");
-        exit;
-    }
-
-    // Enkripsi password
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // Simpan ke database
-    $query = "INSERT INTO users (fullname, phone, email, address, password, role) 
-              VALUES ('$fullname', '$phone', '$email', '$address', '$hashedPassword', '$role')";
-
-    if (mysqli_query($conn, $query)) {
+    // Menjalankan proses registrasi
+    if ($registration->register()) {
         $_SESSION['success'] = "Registrasi berhasil! Silakan login.";
         header("Location: login.php");
         exit;
     } else {
-        $_SESSION['error'] = "Terjadi kesalahan saat menyimpan data.";
+        $_SESSION['error'] = $registration->error; // Menampilkan error dari kelas
         header("Location: registrasi.php");
         exit;
     }

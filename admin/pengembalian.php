@@ -137,8 +137,8 @@
                       // Mengecek apakah masa perawatan sudah selesai
                       if ($current_date_only > $maintenance_end_date) {
                           // Jika masa perawatan sudah selesai dan status bukan "dipesan", update status mobil menjadi 'tersedia'
-                          if ($row['status'] != 'dipesan' && $row['status'] != 'tersedia') {
-                              // Hanya perbarui status jika tidak dalam status 'dipesan' atau 'tersedia'
+                          if ($row['status'] != 'dipesan' && $row['status'] != 'tersedia' && $row['status'] != 'dalam_perawatan') {
+                              // Hanya perbarui status jika tidak dalam status 'dipesan', 'tersedia', atau 'dalam_perawatan'
                               $update_car_status = "UPDATE cars SET status = 'tersedia' WHERE car_id = " . $row['car_id'];
                               mysqli_query($conn, $update_car_status);
                           }
