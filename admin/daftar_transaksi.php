@@ -62,11 +62,11 @@
                   <th style="width: 5%;">No</th>
                   <th style="width: 15%;">Tanggal & Waktu</th>
                   <th style="width: 15%;">Order ID</th>
-                  <th style="width: 15%;">Tipe Pembayaran</th>
+                  <th style="width: 15%;">Nama Penyewa</th>
                   <th style="width: 10%;">Total</th>
-                  <th style="width: 10%;">Status</th>
-                  <th style="width: 20%;">Nama Penyewa</th>
-                  <th style="width: 10%;" class="no-print">Aksi</th>
+                  <th style="width: 10%;">Status Pembayaran</th>
+                  <th style="width: 15%;" class="no-print">Bukti Pembayaran</th>
+                  <th style="width: 25%;" class="no-print">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,13 +86,22 @@
                   $sql_filter = " AND YEAR(p.created_at) = '$year_filter'";
                 }
 
-                // Query untuk mengambil data transaksi dari tabel payments, rentals, dan users
-                $sql = "SELECT p.order_id, p.payment_type, p.gross_amount, p.payment_status, p.created_at, u.fullname AS customer_name
+                $sql = "SELECT p.order_id,
+                            p.gross_amount,
+                            p.payment_status,
+                            p.created_at,
+                            p.receipt_image,
+                            u.fullname AS customer_name
                         FROM payments p
                         JOIN rentals r ON p.order_id = r.order_id
                         JOIN users u ON r.user_id = u.id
                         WHERE 1=1 $sql_filter
-                        ORDER BY p.created_at DESC"; // Urutkan berdasarkan tanggal terbaru
+                        ORDER BY 
+                            CASE 
+                                WHEN p.payment_status = 'verification' THEN 1
+                                ELSE 2
+                            END,
+                            p.created_at DESC";  // Urutkan berdasarkan tanggal terbaru setelah status
                 $result = mysqli_query($conn, $sql);
 
                 while($row = mysqli_fetch_assoc($result)){
@@ -102,23 +111,46 @@
                   <td><?php echo $no; ?></td>
                   <td><?php echo date('d-m-Y H:i:s', strtotime($row['created_at'])); ?></td>
                   <td><?php echo $row['order_id']; ?></td>
-                  <td><?php echo ucfirst($row['payment_type']); ?></td>
+                  <td><?php echo $row['customer_name']; ?></td>
                   <td>Rp<?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></td>
                   <td>
                     <?php
                       // Menentukan badge status pembayaran dengan class unik
                       if ($row['payment_status'] == 'paid') {
-                          echo '<span class="badge-status paid">Paid</span>';
+                          echo '<span class="badge-status paid">Lunas</span>';
                       } elseif ($row['payment_status'] == 'failed') {
-                          echo '<span class="badge-status failed">Failed</span>';
-                      } elseif ($row['payment_status'] == 'pending') {
-                          echo '<span class="badge-status pending">Pending</span>';
+                          echo '<span class="badge-status failed">Dibatalkan</span>';
+                      } elseif ($row['payment_status'] == 'verification') {
+                          echo '<span class="badge-status verification">Perlu Diverifikasi</span>';
                       }
                     ?>
                   </td>
-                  <td><?php echo $row['customer_name']; ?></td>
                   <td class="no-print">
-                    <a href="index.php?page=detail-transaksi&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">Detail</a>
+                    <?php if (!empty($row['receipt_image'])): ?>
+                      <a href="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" target="_blank">
+                        <img src="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" alt="Bukti Pembayaran" class="img-thumbnail" width="100">
+                      </a>
+                    <?php else: ?>
+                      <span class="text-muted">Tidak ada bukti</span>
+                    <?php endif; ?>
+                  </td>
+                  <td class="no-print">
+                      <!-- Tombol Detail Transaksi -->
+                      <a href="index.php?page=detail-transaksi&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">
+                          <i class="fas fa-info-circle"></i>
+                      </a>
+
+                      <?php if ($row['payment_status'] == 'verification'): ?>
+                          <!-- Tombol Konfirmasi Pembayaran dengan SweetAlert -->
+                          <a onclick="konfirmasiPembayaran('<?php echo htmlspecialchars($row['order_id']); ?>')" class="btn btn-success btn-sm">
+                              <i class="fas fa-check-circle"></i>
+                          </a>
+
+                          <!-- Tombol Batal Pembayaran dengan SweetAlert -->
+                          <button onclick="batalPembayaran('<?php echo htmlspecialchars($row['order_id']); ?>')" class="btn btn-danger btn-sm">
+                              <i class="fas fa-times-circle"></i>
+                          </button>
+                      <?php endif; ?>
                   </td>
                 </tr>
                 <?php } ?>
@@ -136,34 +168,94 @@
   <!-- /.container-fluid -->
 </section>
 
+<script>
+    function konfirmasiPembayaran(order_id) {
+      Swal.fire({
+          title: "Apakah Anda Yakin?",
+          text: "Konfirmasi pembayaran untuk transaksi ini.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, konfirmasi!"
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.location = "update/konfirmasi_pembayaran.php?orderid=" + order_id;
+          }
+      });
+    }
+
+    function batalPembayaran(order_id) {
+      Swal.fire({
+          title: "Apakah Anda Yakin?",
+          text: "Pembayaran ini akan dibatalkan.",
+          icon: "error",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, batalkan!"
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.location = "update/batal_pembayaran.php?orderid=" + order_id;
+          }
+      });
+    }
+</script>
+
+
+
 <!-- Menambahkan CSS untuk badge dengan desain yang lebih baik -->
 <style>
   /* Badge untuk status pembayaran */
   .badge-status {
-    padding: 4px 10px;
-    border-radius: 6px; /* Mengurangi radius agar lebih sedikit rounded */
+    padding: 4px 8px;
+    border-radius: 6px;
     font-weight: 600;
     text-transform: capitalize;
     display: inline-block;
     transition: all 0.3s ease;
-    font-size: 14px; /* Ukuran font lebih kecil */
+    font-size: 14px;
   }
 
   /* Badge untuk status 'Paid' */
   .badge-status.paid {
-    background-color: #28a745; /* Hijau */
+    background-color: #28a745;
     color: white;
   }
 
   /* Badge untuk status 'Failed' */
   .badge-status.failed {
-    background-color: #dc3545; /* Merah */
+    background-color: #dc3545;
     color: white;
   }
 
-  /* Badge untuk status 'Pending' */
-  .badge-status.pending {
-    background-color: #ffc107; /* Kuning */
+  /* Badge untuk status 'Verification' */
+  .badge-status.verification {
+    background-color: #ffc107;
     color: black;
+  }
+
+  /* Gambar thumbnail untuk bukti pembayaran */
+  .img-thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  /* Tombol konfirmasi pembayaran */
+  .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+  }
+
+  /* Tombol batalkan */
+  .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+  }
+
+  /* Menggunakan FontAwesome Icons */
+  .btn i {
+    font-size: 18px;
   }
 </style>

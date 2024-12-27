@@ -1,9 +1,21 @@
 <?php
 include("../config/config.php");
 
-// Query untuk Daftar Transaksi
-$query_transaksi = mysqli_query($conn, "SELECT count(payment_id) AS jumlah_payment FROM payments"); 
+// Query untuk Transaksi Dibayar
+$query_transaksi = mysqli_query($conn, "SELECT count(payment_id) AS jumlah_payment FROM payments WHERE payment_status = 'paid'"); 
 $view_transaksi = mysqli_fetch_array($query_transaksi);
+
+// Query untuk Konfirmasi Bayar
+$query_perlu_konfirmasi = mysqli_query($conn, "SELECT count(payment_id) AS jumlah_perlu_konfirmasi FROM payments WHERE payment_status = 'verification'"); 
+$view_perlu_konfirmasi = mysqli_fetch_array($query_perlu_konfirmasi);
+
+// Query untuk Transaksi Dibatalkan
+$query_transaksi_dibatalkan = mysqli_query($conn, "SELECT count(payment_id) AS jumlah_dibatalkan FROM payments WHERE payment_status = 'failed'"); 
+$view_transaksi_dibatalkan = mysqli_fetch_array($query_transaksi_dibatalkan);
+
+// Query untuk Perlu Konfirmasi Pengembalian Mobil
+$query_konfirmasi_pengembalian = mysqli_query($conn, "SELECT count(payment_id) AS jumlah_konfirmasi_pengembalian FROM payments WHERE rental_status = 'active' AND payment_status = 'paid'"); 
+$view_konfirmasi_pengembalian = mysqli_fetch_array($query_konfirmasi_pengembalian);
 
 // Query untuk Total Mobil
 $query_total_mobil = mysqli_query($conn, "SELECT count(car_id) AS total_mobil FROM cars"); 
@@ -37,17 +49,61 @@ $view_user_nonaktif = mysqli_fetch_array($query_user_nonaktif);
 <!-- Menampilkan data dalam box -->
 
 <div class="col-lg-3 col-6">
-    <!-- small box Daftar Transaksi -->
+    <!-- small box Transaksi Dibayar -->
     <div class="small-box bg-info">
         <div class="inner">
             <h3><?php echo $view_transaksi['jumlah_payment']; ?></h3>
-            <p>Daftar Transaksi</p>
+            <p>Transaksi Dibayar</p>
         </div>
         <div class="icon">
             <i class="ion ion-bag"></i>
         </div>
         <!-- Link ke halaman daftar transaksi -->
         <a href="index.php?page=daftar-transaksi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+
+<div class="col-lg-3 col-6">
+    <!-- small box Konfirmasi Bayar -->
+    <div class="small-box bg-warning">
+        <div class="inner">
+            <h3><?php echo $view_perlu_konfirmasi['jumlah_perlu_konfirmasi']; ?></h3>
+            <p>Konfirmasi Bayar</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-exclamation-circle"></i> <!-- Ikon untuk Konfirmasi Bayar -->
+        </div>
+        <!-- Link ke halaman konfirmasi pembayaran -->
+        <a href="index.php?page=daftar-transaksi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+<div class="col-lg-3 col-6">
+    <!-- small box Transaksi Dibatalkan -->
+    <div class="small-box bg-danger">
+        <div class="inner">
+            <h3><?php echo $view_transaksi_dibatalkan['jumlah_dibatalkan']; ?></h3>
+            <p>Transaksi Dibatalkan</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-times-circle"></i> <!-- Ikon untuk transaksi dibatalkan -->
+        </div>
+        <!-- Link ke halaman transaksi dibatalkan -->
+        <a href="index.php?page=daftar-transaksi" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+</div>
+
+<div class="col-lg-3 col-6">
+    <!-- small box Konfirmasi Retur -->
+    <div class="small-box bg-primary">
+        <div class="inner">
+            <h3><?php echo $view_konfirmasi_pengembalian['jumlah_konfirmasi_pengembalian']; ?></h3>
+            <p>Konfirmasi Retur</p>
+        </div>
+        <div class="icon">
+            <i class="fas fa-undo"></i> <!-- Ikon untuk pengembalian mobil -->
+        </div>
+        <!-- Link ke halaman konfirmasi pengembalian -->
+        <a href="index.php?page=pengembalian" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
     </div>
 </div>
 

@@ -1,144 +1,56 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';  // Memuat autoloader Composer
+session_start();
+require 'config/config.php';
 
-// Memuat .env menggunakan phpdotenv
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $car_id = $_POST['car_id'];
+    $user_id = $_POST['user_id'];
+    $start_date = $_POST['start_date'];
+    $end_date = $_POST['end_date'];
 
-// Ambil API Key Midtrans dari file .env menggunakan $_ENV
-$serverKey = $_ENV['MIDTRANS_SERVER_KEY'];
-$clientKey = $_ENV['MIDTRANS_CLIENT_KEY'];
-$isProduction = $_ENV['MIDTRANS_IS_PRODUCTION'] === 'true';  // Konversi ke boolean
+    // Periksa durasi sewa
+    $startDate = new DateTime($start_date);
+    $endDate = new DateTime($end_date);
+    $duration = $startDate->diff($endDate)->days;
 
-// Cek apakah kunci API sudah diatur dengan benar
-if (!$serverKey || !$clientKey) {
-    die("API Key Midtrans tidak ditemukan di .env.");
-}
+    if ($duration <= 0) {
+        $_SESSION['error'] = "Durasi sewa tidak valid.";
+        header("Location: rental_form.php?id=$car_id");
+        exit();
+    }
 
-// Konfigurasi Midtrans
-\Midtrans\Config::$serverKey = $serverKey;
-\Midtrans\Config::$clientKey = $clientKey;
-\Midtrans\Config::$isProduction = $isProduction;
-\Midtrans\Config::$isSanitized = true;
-\Midtrans\Config::$is3ds = true;
+    // Ambil harga kendaraan berdasarkan car_id
+    $carQuery = "SELECT price_24_hours FROM cars WHERE car_id = '$car_id'";
+    $carResult = mysqli_query($conn, $carQuery);
+    if (!$carResult || mysqli_num_rows($carResult) === 0) {
+        $_SESSION['error'] = "Data mobil tidak ditemukan.";
+        header("Location: rental_form.php?id=$car_id");
+        exit();
+    }
+    $carData = mysqli_fetch_assoc($carResult);
+    $pricePerDay = $carData['price_24_hours'];
 
-// Koneksi ke database
-require_once 'config/config.php';
+    // Hitung total harga
+    $totalPrice = $pricePerDay * $duration;
 
-// Ambil data dari form rental
-$car_id = filter_var($_POST['car_id'], FILTER_VALIDATE_INT);
-$user_id = filter_var($_POST['user_id'], FILTER_VALIDATE_INT);
+    // Generate order_id unik
+    $order_id = uniqid('ORD');
 
-if (!$car_id || !$user_id) {
-    die("ID mobil atau ID pengguna tidak valid.");
-}
-
-$model = $_POST['model'];
-$start_date = $_POST['start_date'];
-$end_date = $_POST['end_date'];
-$duration = $_POST['duration'];
-$total_price = $_POST['total_price'];  // Total harga yang dihitung sebelumnya (tanpa format)
-
-// Validasi tanggal
-if ($start_date > $end_date) {
-    die("Tanggal mulai sewa tidak boleh lebih besar dari tanggal selesai.");
-}
-
-// Menghapus 'Rp' dan titik (.), serta mengganti koma (,) dengan titik (.)
-// Membersihkan format harga dari 'Rp' dan titik
-$total_price_cleaned = str_replace(['Rp', '.'], '', $total_price);  // Hapus 'Rp' dan titik
-$total_price_cleaned = str_replace(',', '.', $total_price_cleaned);  // Ganti koma dengan titik
-
-// Pastikan harga adalah angka setelah pembersihan
-if (!is_numeric($total_price_cleaned)) {
-    die("Harga total tidak valid.");
-}
-
-$total_price_float = (float) $total_price_cleaned;
-
-// Ambil informasi pengguna dari database
-$sql_user = "SELECT fullname, email, phone FROM users WHERE id = ?";
-$stmt = mysqli_prepare($conn, $sql_user);
-mysqli_stmt_bind_param($stmt, "i", $user_id);
-mysqli_stmt_execute($stmt);
-$result_user = mysqli_stmt_get_result($stmt);
-$user = mysqli_fetch_assoc($result_user);
-
-// Periksa apakah data pengguna ditemukan
-if (!$user) {
-    die("Pengguna tidak ditemukan.");
-}
-
-// Membuat transaksi Midtrans
-$transaction_details = array(
-    'order_id' => "R" . uniqid(),  // Generate unique order ID
-    'gross_amount' => $total_price_float, // Harga tanpa format Rp dan titik
-);
-
-// Data pengguna untuk keperluan transaksi
-$customer_details = array(
-    'first_name' => $user['fullname'],
-    'email' => $user['email'],
-    'phone' => $user['phone'],
-);
-
-// Menambahkan detail item untuk transaksi (Mobil) dan menambahkan jumlah hari sebagai pengganti quantity
-$item_details = array(
-    array(
-        'id' => $car_id, // ID Mobil
-        'price' => $total_price_float,
-        'name' => $model, // Nama Mobil
-        'quantity' => 1,  // Menambahkan quantity (diatur ke 1 karena hanya satu item mobil)
-        'custom_field1' => $duration . ' Hari', // Durasi Sewa (Jumlah Hari)
-        'custom_field2' => 'Mulai: ' . $start_date,  // Tanggal Mulai
-        'custom_field3' => 'Selesai: ' . $end_date, // Tanggal Selesai
-        'custom_field4' => 'Total Harga: Rp ' . number_format($total_price_float, 0, ',', '.') // Total Harga
-    )
-);
-
-// Data transaksi lengkap
-$transaction = array(
-    'transaction_details' => $transaction_details,
-    'customer_details' => $customer_details,
-    'item_details' => $item_details,  // Menambahkan item detail beserta custom field
-);
-
-// Kirim transaksi ke Midtrans
-try {
-    // Membuat transaksi dengan Midtrans
-    $payment_url = \Midtrans\Snap::createTransaction($transaction)->redirect_url;
-
-    // Simpan transaksi ke dalam database
-    $order_id = $transaction_details['order_id'];
-    $payment_status = 'not_chosen';  // Status pembayaran sementara, menunggu pembayaran
-
-    // Query untuk menyimpan data rental
-    $sql_rental = "INSERT INTO rentals (user_id, car_id, start_date, end_date, duration, total_price, order_id, payment_status)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt_rental = mysqli_prepare($conn, $sql_rental);
-    
-    // Bind parameter dan eksekusi query untuk menyimpan rental
-    mysqli_stmt_bind_param($stmt_rental, "iissdsss", $user_id, $car_id, $start_date, $end_date, $duration, $total_price_float, $order_id, $payment_status);
-    mysqli_stmt_execute($stmt_rental);
-
-    // Ambil rental_id yang baru disimpan
-    $rental_id = mysqli_insert_id($conn);
-
-    // Simpan link pembayaran ke dalam tabel payment_links
-    $sql_payment_link = "INSERT INTO payment_links (rental_id, payment_url)
-                         VALUES (?, ?)";
-    $stmt_payment_link = mysqli_prepare($conn, $sql_payment_link);
-
-    // Bind parameter dan eksekusi query untuk menyimpan payment_url
-    mysqli_stmt_bind_param($stmt_payment_link, "is", $rental_id, $payment_url);
-    mysqli_stmt_execute($stmt_payment_link);
-
-    // Redirect ke halaman pembayaran Midtrans
-    header('Location: ' . $payment_url);
-    exit();
-} catch (Exception $e) {
-    // Tangani kesalahan dengan memberikan pesan yang jelas
-    echo "Terjadi kesalahan dalam proses pembayaran: " . $e->getMessage();
+    // Insert data rental ke database
+    $sql = "INSERT INTO rentals (car_id, user_id, start_date, end_date, duration, total_price, payment_status, order_id, created_at) 
+            VALUES ('$car_id', '$user_id', '$start_date', '$end_date', '$duration', '$totalPrice', 'pending', '$order_id', NOW())";
+    if (mysqli_query($conn, $sql)) {
+        // Redirect ke halaman invoice
+        header("Location: invoice.php?id=$order_id");
+        exit();
+    } else {
+        $_SESSION['error'] = "Terjadi kesalahan saat memproses rental.";
+        header("Location: rental_form.php?id=$car_id");
+        exit();
+    }
+} else {
+    $_SESSION['error'] = "Metode request tidak valid.";
+    header("Location: index.php");
     exit();
 }
 ?>

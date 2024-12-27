@@ -37,12 +37,17 @@
                   <select name="year" id="year" class="form-control">
                     <option value="">Semua Tahun</option>
                     <?php
-                      // Menampilkan tahun yang tersedia berdasarkan data transaksi
+                      include 'config/database.php';
+
                       $sql_year = "SELECT DISTINCT YEAR(r.start_date) AS year FROM rentals r ORDER BY year DESC";
                       $year_result = mysqli_query($conn, $sql_year);
-                      while ($year_row = mysqli_fetch_assoc($year_result)) {
-                        $selected = (isset($_POST['year']) && $_POST['year'] == $year_row['year']) ? 'selected' : '';
-                        echo "<option value='{$year_row['year']}' $selected>{$year_row['year']}</option>";
+                      if ($year_result) {
+                        while ($year_row = mysqli_fetch_assoc($year_result)) {
+                          $selected = (isset($_POST['year']) && $_POST['year'] == $year_row['year']) ? 'selected' : '';
+                          echo "<option value='{$year_row['year']}' $selected>{$year_row['year']}</option>";
+                        }
+                      } else {
+                        echo "<option value=''>Error: " . mysqli_error($conn) . "</option>";
                       }
                     ?>
                   </select>
@@ -61,23 +66,21 @@
                 <tr>
                   <th style="width: 5%;">No</th>
                   <th style="width: 15%;">Order ID</th>
-                  <th style="width: 20%;">Nama Mobil</th>
-                  <th style="width: 15%;">Tanggal Mulai</th>
-                  <th style="width: 15%;">Tanggal Selesai</th>
+                  <th style="width: 15%;">Nama Mobil</th>
+                  <th style="width: 10%;">Tanggal Mulai</th>
+                  <th style="width: 10%;">Tanggal Selesai</th>
                   <th style="width: 10%;">Total</th>
-                  <th style="width: 20%;">Nama Penyewa</th>
-                  <th style="width: 10%;">Status</th>
-                  <th style="width: 10%;" class="no-print">Aksi</th>
+                  <th style="width: 15%;">Nama Penyewa</th>
+                  <th style="width: 10%;">Status Penyewaan</th>
+                  <th style="width: 30%;" class="no-print">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 <?php 
                 $no = 0;
-                // Ambil data bulan dan tahun yang dipilih
                 $month_filter = isset($_POST['month']) ? $_POST['month'] : '';
                 $year_filter = isset($_POST['year']) ? $_POST['year'] : '';
 
-                // Menambahkan filter bulan dan tahun pada query
                 $sql_filter = "";
                 if ($month_filter != '' && $year_filter != '') {
                   $sql_filter = " AND MONTH(r.start_date) = '$month_filter' AND YEAR(r.start_date) = '$year_filter'";
@@ -87,83 +90,65 @@
                   $sql_filter = " AND YEAR(r.start_date) = '$year_filter'";
                 }
 
-                // Query untuk mengambil data transaksi dari tabel payments, rentals, users, dan cars
                 $sql = "SELECT p.order_id, 
-                               CONCAT(c.brand, ' ', c.model, ' ', c.year) AS car_name, 
-                               r.start_date, 
-                               r.end_date, 
-                               p.gross_amount, 
-                               p.payment_status, 
-                               u.fullname AS customer_name,
-                               c.car_id, c.status
-                        FROM payments p
-                        JOIN rentals r ON p.order_id = r.order_id
-                        JOIN users u ON r.user_id = u.id
-                        JOIN cars c ON r.car_id = c.car_id
-                        WHERE 1=1 $sql_filter
-                        ORDER BY r.start_date DESC"; // Urutkan berdasarkan tanggal mulai
+                        CONCAT(c.brand, ' ', c.model, ' ', c.year) AS car_name, 
+                        r.start_date, 
+                        r.end_date, 
+                        p.gross_amount, 
+                        p.payment_status, 
+                        p.rental_status, 
+                        u.fullname AS customer_name,
+                        c.car_id, c.status
+                FROM payments p
+                JOIN rentals r ON p.order_id = r.order_id
+                JOIN users u ON r.user_id = u.id
+                JOIN cars c ON r.car_id = c.car_id
+                WHERE p.payment_status = 'paid' $sql_filter
+                ORDER BY 
+                    CASE 
+                        WHEN p.rental_status = 'active' THEN 1 
+                        ELSE 2 
+                    END, 
+                    p.created_at DESC"; // Mengurutkan berdasarkan tanggal terbaru setelah status pengembalian
+
                 $result = mysqli_query($conn, $sql);
-                while($row = mysqli_fetch_assoc($result)){
-                  $no++;
+                if ($result) {
+                  while($row = mysqli_fetch_assoc($result)){
+                    $no++;
                 ?>
                 <tr>
                   <td><?php echo $no; ?></td>
                   <td><?php echo $row['order_id']; ?></td>
-                  <td><?php echo $row['car_name']; ?></td> <!-- Menampilkan Nama Mobil -->
+                  <td><?php echo $row['car_name']; ?></td>
                   <td><?php echo date('d-m-Y', strtotime($row['start_date'])); ?></td>
                   <td><?php echo date('d-m-Y', strtotime($row['end_date'])); ?></td>
                   <td>Rp<?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></td>
                   <td><?php echo $row['customer_name']; ?></td>
                   <td>
-                  <?php
-                  // Menggunakan DateTime untuk perbandingan tanggal
-                  $current_date = new DateTime();
-                  $end_date = new DateTime($row['end_date']);
-                  $start_date = new DateTime($row['start_date']);
-
-                  // Pastikan hanya perbandingan tanggal (tanpa waktu)
-                  $current_date_only = $current_date->format('Y-m-d');
-                  $end_date_only = $end_date->format('Y-m-d');
-
-                  // Menentukan status penyewaan
-                  if ($end_date_only < $current_date_only) {
-                      // Jika tanggal selesai sudah lewat, tampilkan status "Penyewaan Selesai"
-                      echo '<span class="badge-status badge-success">Penyewaan Selesai</span>';
-
-                      // Tambahkan satu hari untuk masa maintenance
-                      $maintenance_start_date = (clone $end_date)->modify('+1 day');
-                      $maintenance_end_date = (clone $maintenance_start_date)->format('Y-m-d');
-
-                      // Mengecek apakah masa perawatan sudah selesai
-                      if ($current_date_only > $maintenance_end_date) {
-                          // Jika masa perawatan sudah selesai dan status bukan "dipesan", update status mobil menjadi 'tersedia'
-                          if ($row['status'] != 'dipesan' && $row['status'] != 'tersedia' && $row['status'] != 'dalam_perawatan') {
-                              // Hanya perbarui status jika tidak dalam status 'dipesan', 'tersedia', atau 'dalam_perawatan'
-                              $update_car_status = "UPDATE cars SET status = 'tersedia' WHERE car_id = " . $row['car_id'];
-                              mysqli_query($conn, $update_car_status);
-                          }
-                      } else {
-                          // Jika masih dalam masa perawatan, update status mobil menjadi 'dalam_perawatan' jika status belum 'dalam_perawatan'
-                          if ($row['status'] != 'dalam_perawatan') {
-                              // Hanya perbarui status jika belum dalam status 'dalam_perawatan'
-                              $update_car_status = "UPDATE cars SET status = 'dalam_perawatan' WHERE car_id = " . $row['car_id'];
-                              mysqli_query($conn, $update_car_status);
-                          }
+                    <?php 
+                      if ($row['rental_status'] == 'completed') {
+                        echo '<span class="badge-status badge-success">Penyewaan Selesai</span>';
+                      } elseif ($row['rental_status'] == 'active') {
+                        echo '<span class="badge-status badge-warning">Sedang Disewa</span>';
+                      } elseif ($row['rental_status'] == 'cancelled') {
+                        echo '<span class="badge-status badge-danger">Dibatalkan</span>';
                       }
-                  } else {
-                      // Jika tanggal selesai belum lewat, status masih dalam masa penyewaan
-                      if ($row['status'] != 'dipesan') {
-                          // Hanya perbarui status jika berbeda dari 'dipesan'
-                          $update_car_status = "UPDATE cars SET status = 'dipesan' WHERE car_id = " . $row['car_id'];
-                          mysqli_query($conn, $update_car_status);
-                      }
-                      echo '<span class="badge-status badge-warning">Dipesan</span>';
-                  }
-                  ?>
+                    ?>
                   </td>
                   <td class="no-print">
-                    <a href="index.php?page=detail-pengembalian&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">Detail</a>
+                    <?php if ($row['rental_status'] == 'active') { ?>
+                      <a onclick="konfirmasiPengembalian('<?php echo htmlspecialchars($row['order_id']); ?>')" class="btn btn-success btn-sm">
+                        <i class="fas fa-check-circle"></i>
+                      </a>
+                    <?php } ?>
+                    <a href="index.php?page=detail-pengembalian&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">
+                      <i class="fas fa-info-circle"></i>
+                    </a>
                   </td>
+                </tr>
+                <?php }} else { ?>
+                <tr>
+                  <td colspan="9" class="text-center">Data tidak ditemukan. Error: <?php echo mysqli_error($conn); ?></td>
                 </tr>
                 <?php } ?>
               </tbody>
@@ -180,28 +165,47 @@
   <!-- /.container-fluid -->
 </section>
 
-<!-- Menambahkan CSS untuk badge dengan desain yang lebih baik -->
+<script>
+    function konfirmasiPengembalian(order_id) {
+      Swal.fire({
+          title: "Apakah Anda Yakin?",
+          text: "Konfirmasi pengembalian mobil untuk transaksi ini.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ya, konfirmasi!"
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.location = "update/konfirmasi_pengembalian.php?orderid=" + order_id;
+          }
+      });
+    }
+</script>
+
 <style>
-  /* Badge untuk status penyewaan */
   .badge-status {
-    padding: 4px 10px;
-    border-radius: 6px; /* Mengurangi radius agar lebih sedikit rounded */
+    padding: 4px 8px;
+    border-radius: 6px;
     font-weight: 600;
     text-transform: capitalize;
     display: inline-block;
     transition: all 0.3s ease;
-    font-size: 14px; /* Ukuran font lebih kecil */
+    font-size: 14px;
   }
-
-  /* Badge untuk status "Sedang Disewa" */
   .badge-status.badge-warning {
-    background-color: #ffc107; /* Kuning */
+    background-color: #ffc107;
     color: black;
   }
-
-  /* Badge untuk status "Penyewaan Selesai" */
   .badge-status.badge-success {
-    background-color: #28a745; /* Hijau */
+    background-color: #28a745;
     color: white;
+  }
+  .badge-status.badge-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  .btn i {
+    font-size: 18px;
   }
 </style>

@@ -21,7 +21,7 @@ if (isset($_SESSION['user_id'])) {
     $sql_count_notifications = "SELECT COUNT(*) AS new_notifications 
                                 FROM rentals
                                 WHERE user_id = '$user_id'
-                                AND payment_status = 'pending'";
+                                AND payment_status = 'verification'";
     $result_notifications = mysqli_query($conn, $sql_count_notifications);
 
     if ($result_notifications) {

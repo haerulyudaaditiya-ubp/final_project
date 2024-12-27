@@ -114,7 +114,7 @@
                 console.log("Link clicked!");
             });
         });
-    }, 5000);  // Anda bisa menyesuaikan interval waktu
+    }, 2000);  // Anda bisa menyesuaikan interval waktu
   });
 
   $(document).ready(function(){
@@ -127,49 +127,6 @@
                 console.log("Link clicked!");
             });
         });
-    }, 5000);  // Anda bisa menyesuaikan interval waktu
+    }, 2000);  // Anda bisa menyesuaikan interval waktu
   });
-
-
-  // $(document).ready(function(){
-  //   // Memuat konten hanya sekali dari donut_chart.php
-  //   $('#donutChart').load("donut_chart.php", function() {
-  //       // Pasang event handler untuk elemen setelah konten dimuat
-  //       $('a').off('click').on('click', function(e) {
-  //           console.log("Link clicked!");
-  //       });
-        
-  //       // Setelah konten dimuat, inisialisasi chart
-  //       var donutChartCanvas = $('#donutChartCanvas').get(0).getContext('2d');
-        
-  //       // Data untuk donut chart
-  //       var donutData = {
-  //           labels: [
-  //               'Chrome',
-  //               'IE',
-  //               'FireFox',
-  //               'Safari',
-  //               'Opera',
-  //               'Navigator'
-  //           ],
-  //           datasets: [{
-  //               data: [700, 500, 400, 600, 300, 100],
-  //               backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de']
-  //           }]
-  //       };
-
-  //       // Opsi untuk donut chart
-  //       var donutOptions = {
-  //           maintainAspectRatio: false,
-  //           responsive: true,
-  //       };
-
-  //       // Membuat donut chart menggunakan Chart.js
-  //       new Chart(donutChartCanvas, {
-  //           type: 'doughnut',
-  //           data: donutData,
-  //           options: donutOptions
-  //       });
-  //   });
-  // });  
 </script>

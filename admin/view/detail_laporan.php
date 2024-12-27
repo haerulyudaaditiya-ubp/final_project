@@ -4,9 +4,10 @@ if (isset($_GET['orderid'])) {
     $orderid = $_GET['orderid']; // Menangkap order_id dari URL
     
     // Query untuk mengambil detail transaksi berdasarkan order_id
-    $sql = "SELECT p.order_id, p.payment_type, p.gross_amount, p.payment_status, p.created_at, 
+    $sql = "SELECT p.order_id, p.gross_amount, p.payment_status, p.created_at, p.receipt_image,
                    u.fullname AS customer_name, u.phone AS customer_phone, u.email AS customer_email, u.address AS customer_address,
-                   r.car_id, r.start_date, r.end_date, c.model, c.brand, c.year, c.status AS car_status
+                   r.car_id, r.start_date, r.end_date, c.model, c.brand, c.year, c.status AS car_status,
+                   p.rental_status
             FROM payments p
             JOIN rentals r ON p.order_id = r.order_id
             JOIN users u ON r.user_id = u.id
@@ -52,50 +53,23 @@ if (isset($_GET['orderid'])) {
                   <p><?php echo $row['customer_address']; ?></p>
                 </div>
                 <div class="form-group">
-                  <label for="payment_type">Tipe Pembayaran:</label>
-                  <p><?php echo ucfirst($row['payment_type']); ?></p>
+                  <label for="status_sewa">Status Penyewaan:</label>
+                  <p>
+                  <?php
+                      if ($row['rental_status'] == 'completed') {
+                          echo '<span class="badge-status badge-success">Penyewaan Selesai</span>';
+                      } elseif ($row['rental_status'] == 'active') {
+                          echo '<span class="badge-status badge-warning">Sedang Disewa</span>';
+                      } elseif ($row['rental_status'] == 'cancelled') {
+                          echo '<span class="badge-status badge-danger">Dibatalkan</span>';
+                      }
+                  ?>
+                  </p>
                 </div>
               </div>
               
               <!-- Kolom 2: Informasi Sewa Mobil -->
               <div class="col-md-6">
-                <div class="form-group">
-                  <label for="status_sewa">Status Penyewaan:</label>
-                  <p>
-                    <?php
-                    // Mendapatkan tanggal sekarang
-                    $current_date = date('Y-m-d');
-
-                    // Menentukan status penyewaan
-                    if (strtotime($row['end_date']) < strtotime($current_date)) {
-                        // Jika tanggal selesai sudah lewat, tampilkan status "Penyewaan Selesai"
-                        echo '<span class="badge badge-success">Penyewaan Selesai</span>';
-
-                        // Menambah satu hari untuk masa maintenance
-                        $maintenance_start_date = strtotime($row['end_date'] . ' +1 day');
-                        $maintenance_end_date = date('Y-m-d', strtotime($row['end_date'] . ' +1 day'));
-
-                        // Update status mobil menjadi 'dalam_perawatan' setelah penyewaan selesai
-                        if ($row['car_status'] != 'dalam_perawatan') {
-                            $update_car_status = "UPDATE cars SET status = 'dalam_perawatan' WHERE car_id = " . $row['car_id'];
-                            mysqli_query($conn, $update_car_status);
-                        }
-
-                        // Mengecek apakah masa perawatan sudah selesai dan update status mobil menjadi 'tersedia'
-                        if (strtotime($maintenance_end_date) < strtotime($current_date)) {
-                            if ($row['car_status'] != 'tersedia') {
-                                $update_car_status = "UPDATE cars SET status = 'tersedia' WHERE car_id = " . $row['car_id'];
-                                mysqli_query($conn, $update_car_status);
-                            }
-                        }
-
-                    } else {
-                        // Jika tanggal selesai belum lewat, tampilkan status "Sedang Disewa"
-                        echo '<span class="badge badge-warning">Sedang Disewa</span>';
-                    }
-                    ?>
-                  </p>
-                </div>
                 <div class="form-group">
                   <label for="created_at">Tanggal & Waktu Transaksi:</label>
                   <p><?php echo date('d-m-Y H:i:s', strtotime($row['created_at'])); ?></p>
@@ -111,6 +85,18 @@ if (isset($_GET['orderid'])) {
                 <div class="form-group">
                   <label for="gross_amount">Total Pembayaran:</label>
                   <p><strong>Rp <?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></p>
+                </div>
+                <div class="form-group">
+                  <label for="receipt_image">Bukti Pembayaran:</label>
+                  <p>
+                    <?php if (!empty($row['receipt_image'])): ?>
+                      <a href="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" target="_blank">
+                        <img src="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" alt="Bukti Pembayaran" class="img-thumbnail" width="200">
+                      </a>
+                    <?php else: ?>
+                      <span class="text-muted">Tidak ada bukti pembayaran.</span>
+                    <?php endif; ?>
+                  </p>
                 </div>
               </div>
             </div>
@@ -135,4 +121,30 @@ if (isset($_GET['orderid'])) {
 } else {
     echo '<div class="alert alert-warning">Order ID tidak ditemukan.</div>';
 }
-?> 
+?>
+
+<style>
+  /* Badge untuk status penyewaan */
+  .badge-status {
+    padding: 4px 8px;
+    border-radius: 6px; /* Mengurangi radius agar lebih sedikit rounded */
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 14px; /* Ukuran font lebih kecil */
+  }
+
+  /* Badge untuk status "Sedang Disewa" */
+  .badge-status.badge-warning {
+    background-color: #ffc107; /* Kuning */
+    color: black;
+  }
+
+  /* Badge untuk status "Penyewaan Selesai" */
+  .badge-status.badge-success {
+    background-color: #28a745; /* Hijau */
+    color: white;
+  }
+</style>
+

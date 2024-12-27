@@ -198,20 +198,6 @@ ob_end_flush(); // Akhiri output buffering
                     <th>Total Harga</th>
                     <td><strong>Rp <?= number_format($rental['price_24_hours'] * (new DateTime($rental['start_date']))->diff(new DateTime($rental['end_date']))->days, 0, ',', '.'); ?></strong></td>
                 </tr>
-                <tr>
-                    <th>Status Pembayaran</th>
-                    <td>
-                        <?php 
-                            if ($rental['payment_status'] == 'paid') {
-                                echo '<span class="badge bg-success">Lunas</span>';
-                            } elseif ($rental['payment_status'] == 'pending') {
-                                echo '<span class="badge bg-warning">Menunggu Pembayaran</span>';
-                            } else {
-                                echo '<span class="badge bg-danger">Gagal</span>';
-                            }
-                        ?>
-                    </td>
-                </tr>
             </table>
         </div>
     <?php else: ?>

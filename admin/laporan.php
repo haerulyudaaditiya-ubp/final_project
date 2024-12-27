@@ -25,13 +25,21 @@
                 $sql_filter = " AND YEAR(p.created_at) = '$year_filter'";
               }
 
-              // Query untuk mengambil data transaksi dari tabel payments, rentals, dan users
-              $sql = "SELECT p.order_id, p.payment_type, p.gross_amount, p.payment_status, p.created_at, u.fullname AS customer_name
+              $sql = "SELECT 
+                          p.order_id, 
+                          CONCAT(c.brand, ' ', c.model, ' ', c.year) AS car_name, 
+                          r.start_date, 
+                          r.end_date, 
+                          p.gross_amount, 
+                          p.payment_status, 
+                          p.created_at, 
+                          u.fullname AS customer_name
                       FROM payments p
                       JOIN rentals r ON p.order_id = r.order_id
                       JOIN users u ON r.user_id = u.id
-                      WHERE 1=1 $sql_filter
-                      ORDER BY p.created_at DESC"; // Urutkan berdasarkan tanggal dari yang paling lama
+                      JOIN cars c ON r.car_id = c.car_id
+                      WHERE p.payment_status = 'paid' $sql_filter
+                      ORDER BY p.created_at DESC";
               $result = mysqli_query($conn, $sql);
 
               // Hitung total pendapatan di luar loop
@@ -94,15 +102,18 @@
             <!-- Menampilkan Data dalam Tabel -->
             <table id="example1" class="table table-bordered table-striped">
             <thead>
-              <tr>
-                <th style="width: 5%;">No</th>
-                <th style="width: 15%;">Tanggal & Waktu</th>
-                <th style="width: 15%;">Order ID</th>
-                <th style="width: 15%;">Tipe Pembayaran</th>
-                <th style="width: 20%;">Nama Penyewa</th>
-                <th style="width: 10%;">Total</th>
-                <th style="width: 10%;" class="no-print">Aksi</th>
-              </tr>
+            <tr>
+              <th style="width: 5%;">No</th>
+              <th style="width: 15%;">Tanggal & Waktu</th>
+              <th style="width: 15%;">Order ID</th>
+              <th style="width: 25%;">Nama Penyewa</th>
+              <th style="width: 20%;">Nama Mobil</th>
+              <th style="width: 10%;">Tanggal Mulai</th>
+              <th style="width: 10%;">Tanggal Selesai</th>
+              <th style="width: 15%;">Total</th>
+              <th style="width: 10%;" class="no-print">Aksi</th>
+            </tr>
+            
             </thead>
             <tbody>
               <?php 
@@ -115,13 +126,16 @@
                 <td><?php echo $no; ?></td>
                 <td><?php echo date('d-m-Y H:i:s', strtotime($row['created_at'])); ?></td>
                 <td><?php echo $row['order_id']; ?></td>
-                <td><?php echo ucfirst($row['payment_type']); ?></td>
                 <td><?php echo $row['customer_name']; ?></td>
+                <td><?php echo $row['car_name']; ?></td>
+                <td><?php echo date('d-m-Y', strtotime($row['start_date'])); ?></td>
+                <td><?php echo date('d-m-Y', strtotime($row['end_date'])); ?></td>
                 <td>
                   <span class="total-amount">+Rp<?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></span>
                 </td>
                 <td class="no-print">
-                  <a href="index.php?page=detail-laporan&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">Detail</a>
+                  <a href="index.php?page=detail-laporan&orderid=<?php echo $row['order_id']; ?>" class="btn btn-info btn-sm">
+                    <i class="fas fa-info-circle"></i></a>
                 </td>
               </tr>
               <?php } ?>
@@ -212,4 +226,9 @@
     background-color: #0056b3;
     border-color: #004085;
   }
+  /* Menggunakan FontAwesome Icons */
+  .btn i {
+    font-size: 18px;
+  }
+
 </style>

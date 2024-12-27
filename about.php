@@ -43,7 +43,7 @@ require 'includes/header.php';
         </h2>
         <div id="answer1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
           <div class="accordion-body" style="background-color: #f8f9fa;">
-            Untuk memesan mobil, cukup klik tombol <strong>Rental Sekarang</strong> di halaman utama, pilih mobil yang Anda inginkan, dan isi formulir pemesanan dengan data yang diperlukan. Mudah dan praktis!
+            Untuk memesan mobil, cukup klik tombol <strong>Rental</strong> di halaman Daftar Mobil, pilih mobil yang Anda inginkan, dan isi formulir pemesanan dengan data yang diperlukan. Mudah dan praktis!
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@ require 'includes/header.php';
         </h2>
         <div id="answer2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
           <div class="accordion-body" style="background-color: #f8f9fa;">
-            Anda dapat melihat daftar mobil kami di halaman <strong>Layanan</strong>. Di sana, Anda akan menemukan berbagai pilihan kendaraan lengkap dengan harga dan spesifikasi.
+            Anda dapat melihat daftar mobil kami di halaman <strong>Daftar Mobil</strong>. Di sana, Anda akan menemukan berbagai pilihan kendaraan lengkap dengan harga dan spesifikasi.
           </div>
         </div>
       </div>

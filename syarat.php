@@ -21,10 +21,10 @@ require 'includes/header.php'; // Memanggil header
         <li><strong>Proses Pemesanan:</strong> Semua pemesanan harus dilakukan melalui formulir resmi kami, baik secara online maupun langsung. Pemesanan dianggap valid setelah pembayaran uang muka diterima.</li>
         <li><strong>Pembayaran:</strong> Seluruh biaya penyewaan harus dilunasi sebelum kendaraan diserahkan kepada penyewa.</li>
         <li><strong>Kondisi Kendaraan:</strong> Kendaraan diserahkan dalam kondisi bersih dengan bahan bakar penuh. Penyewa diwajibkan mengembalikan kendaraan dalam kondisi yang sama.</li>
-        <li><strong>Keterlambatan Pengembalian:</strong> Keterlambatan pengembalian kendaraan akan dikenakan biaya tambahan sebesar 10% dari tarif harian per jam keterlambatan.</li>
+        <li><strong>Keterlambatan Pengembalian:</strong> Keterlambatan pengembalian kendaraan akan dikenakan biaya tambahan yang kami tentukan sesuai lamanya keterlambatan.</li>
         <li><strong>Larangan Penggunaan:</strong> Kendaraan dilarang digunakan untuk aktivitas ilegal, balapan, atau di medan yang tidak sesuai dengan spesifikasi kendaraan.</li>
         <li><strong>Kerusakan atau Kehilangan:</strong> Penyewa bertanggung jawab penuh atas kerusakan atau kehilangan yang terjadi selama masa penyewaan.</li>
-        <li><strong>Pembatalan:</strong> Pembatalan penyewaan yang dilakukan kurang dari 24 jam sebelum waktu penggunaan akan dikenakan biaya pembatalan sebesar 50% dari total biaya sewa.</li>
+        <li><strong>Pembatalan:</strong> Jika penyewaan dibatalkan dalam waktu kurang dari 24 jam sebelum jadwal penggunaan, mohon segera menghubungi kami untuk pengaturan lebih lanjut.</li>
         <li><strong>Asuransi:</strong> Kami menyediakan asuransi opsional yang dapat dipilih oleh penyewa untuk melindungi dari risiko tertentu.</li>
       </ol>
       <p style="font-size: 1rem; line-height: 1.6; color: #333;">

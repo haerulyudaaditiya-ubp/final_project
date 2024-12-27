@@ -4,7 +4,7 @@ if (isset($_GET['orderid'])) {
     $orderid = $_GET['orderid']; // Menangkap order_id dari URL
     
     // Query untuk mengambil detail transaksi berdasarkan order_id
-    $sql = "SELECT p.order_id, p.payment_type, p.gross_amount, p.payment_status, p.created_at, 
+    $sql = "SELECT p.order_id, p.gross_amount, p.payment_status, p.created_at, p.receipt_image,
                    u.fullname AS customer_name, u.phone AS customer_phone, u.email AS customer_email, u.address AS customer_address,
                    r.car_id, r.start_date, r.end_date, c.model, c.brand, c.year
             FROM payments p
@@ -38,7 +38,6 @@ if (isset($_GET['orderid'])) {
                   <label for="customer_name">Nama Penyewa:</label>
                   <p><?php echo $row['customer_name']; ?></p>
                 </div>
-                <!-- Menambahkan informasi kontak -->
                 <div class="form-group">
                   <label for="customer_phone">No HP:</label>
                   <p><?php echo $row['customer_phone']; ?></p>
@@ -52,28 +51,24 @@ if (isset($_GET['orderid'])) {
                   <p><?php echo $row['customer_address']; ?></p>
                 </div>
                 <div class="form-group">
-                  <label for="payment_type">Tipe Pembayaran:</label>
-                  <p><?php echo ucfirst($row['payment_type']); ?></p>
-                </div>
-              </div>
-              
-              <!-- Kolom 2: Informasi Sewa Mobil -->
-              <div class="col-md-6">
-                <div class="form-group">
                   <label for="payment_status">Status Pembayaran:</label>
                   <p>
                     <?php
                     // Menentukan badge status pembayaran dengan class unik
                     if ($row['payment_status'] == 'paid') {
-                        echo '<span class="badge badge-success">Paid</span>';
+                        echo '<span class="badge-status paid">Lunas</span>';
                     } elseif ($row['payment_status'] == 'failed') {
-                        echo '<span class="badge badge-danger">Failed</span>';
-                    } elseif ($row['payment_status'] == 'pending') {
-                        echo '<span class="badge badge-warning">Pending</span>';
+                        echo '<span class="badge-status failed">Dibatalkan</span>';
+                    } elseif ($row['payment_status'] == 'verification') {
+                        echo '<span class="badge-status paid verification">Perlu verifikasi</span>';
                     }
                     ?>
                   </p>
                 </div>
+              </div>
+              
+              <!-- Kolom 2: Informasi Sewa Mobil -->
+              <div class="col-md-6">
                 <div class="form-group">
                   <label for="created_at">Tanggal & Waktu Transaksi:</label>
                   <p><?php echo date('d-m-Y H:i:s', strtotime($row['created_at'])); ?></p>
@@ -88,7 +83,19 @@ if (isset($_GET['orderid'])) {
                 </div>
                 <div class="form-group">
                   <label for="gross_amount">Total Pembayaran:</label>
-                  <p><strong>Rp <?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></p>
+                  <p><strong>Rp <?php echo number_format($row['gross_amount'], 0, ',', '.'); ?></strong></p>
+                </div>
+                <div class="form-group">
+                  <label for="receipt_image">Bukti Pembayaran:</label>
+                  <p>
+                    <?php if (!empty($row['receipt_image'])): ?>
+                      <a href="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" target="_blank">
+                        <img src="../uploads/bukti_transfer/<?php echo htmlspecialchars($row['receipt_image']); ?>" alt="Bukti Pembayaran" class="img-thumbnail" width="200">
+                      </a>
+                    <?php else: ?>
+                      <span class="text-muted">Tidak ada bukti pembayaran.</span>
+                    <?php endif; ?>
+                  </p>
                 </div>
               </div>
             </div>
@@ -114,3 +121,34 @@ if (isset($_GET['orderid'])) {
     echo '<div class="alert alert-warning">Order ID tidak ditemukan.</div>';
 }
 ?>
+
+<style>
+  /* Badge untuk status pembayaran */
+  .badge-status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 14px;
+  }
+
+  /* Badge untuk status 'Paid' */
+  .badge-status.paid {
+    background-color: #28a745;
+    color: white;
+  }
+
+  /* Badge untuk status 'Failed' */
+  .badge-status.failed {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  /* Badge untuk status 'Verification' */
+  .badge-status.verification {
+    background-color: #ffc107;
+    color: black;
+  }
+</style>

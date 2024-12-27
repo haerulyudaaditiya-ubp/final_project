@@ -4,7 +4,7 @@ session_start();
 
 // Impor koneksi database
 require '../config/config.php';
-require '../classes/User.php'; // Include kelas User
+require '../classes/UserLogin.php'; // Include kelas User
 
 $error = ''; // Pesan error
 

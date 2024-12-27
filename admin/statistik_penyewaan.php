@@ -1,24 +1,26 @@
 <?php
 include('../config/config.php');
 
-// Query untuk pendapatan terbesar beserta tanggal transaksi
+/// Query untuk pendapatan terbesar beserta tanggal transaksi dengan status pembayaran 'paid'
 $sql_largest_revenue = "
     SELECT SUM(p.gross_amount) AS daily_revenue, DATE(p.created_at) AS transaction_date 
     FROM payments p
+    WHERE p.payment_status = 'paid'
     GROUP BY DATE(p.created_at)
     ORDER BY daily_revenue DESC
     LIMIT 1";
 $result_largest_revenue = mysqli_query($conn, $sql_largest_revenue);
 
 if ($row = mysqli_fetch_assoc($result_largest_revenue)) {
-    $largest_revenue = $row['daily_revenue'];
-    $largest_revenue_date = $row['transaction_date'];
+$largest_revenue = $row['daily_revenue'];
+$largest_revenue_date = $row['transaction_date'];
 }
 
-// Query untuk pendapatan terkecil beserta tanggal transaksi
+// Query untuk pendapatan terkecil beserta tanggal transaksi dengan status pembayaran 'paid'Z
 $sql_smallest_revenue = "
     SELECT SUM(p.gross_amount) AS daily_revenue, DATE(p.created_at) AS transaction_date 
     FROM payments p
+    WHERE p.payment_status = 'paid'
     GROUP BY DATE(p.created_at)
     ORDER BY daily_revenue ASC
     LIMIT 1";
