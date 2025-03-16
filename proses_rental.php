@@ -37,8 +37,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $order_id = uniqid('ORD');
 
     // Insert data rental ke database
-    $sql = "INSERT INTO rentals (car_id, user_id, start_date, end_date, duration, total_price, payment_status, order_id, created_at) 
-            VALUES ('$car_id', '$user_id', '$start_date', '$end_date', '$duration', '$totalPrice', 'pending', '$order_id', NOW())";
+    $sql = "
+    INSERT INTO rentals (
+        car_id, 
+        user_id, 
+        start_date, 
+        end_date, 
+        duration, 
+        total_price, 
+        payment_status, 
+        order_id, 
+        created_at
+    ) 
+    VALUES (
+        '$car_id', 
+        '$user_id', 
+        '$start_date', 
+        '$end_date', 
+        '$duration', 
+        '$totalPrice', 
+        'pending', 
+        '$order_id', 
+        NOW()
+    )
+    ";
     if (mysqli_query($conn, $sql)) {
         // Redirect ke halaman invoice
         header("Location: invoice.php?id=$order_id");

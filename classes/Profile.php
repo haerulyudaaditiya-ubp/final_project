@@ -26,25 +26,35 @@ class Profile {
         $phone = mysqli_real_escape_string($this->conn, $phone);
         $email = mysqli_real_escape_string($this->conn, $email);
         $address = mysqli_real_escape_string($this->conn, $address);
-
+    
         // Validasi
         if (empty($fullname) || empty($phone) || empty($email) || empty($address)) {
             $_SESSION['error'] = "Semua field harus diisi!";
             return false;
         }
-
+    
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['error'] = "Format email tidak valid!";
             return false;
         }
-
-        if (!ctype_digit($phone)) {
-            $_SESSION['error'] = "Nomor telepon harus berupa angka!";
+    
+        if (!ctype_digit($phone) || strlen($phone) > 15) {
+            $_SESSION['error'] = "Nomor telepon harus berupa angka dan maksimal 15 digit!";
             return false;
         }
-
+    
+        // Cek apakah email atau nomor telepon sudah terdaftar pada pengguna lain
+        if (!$this->checkDuplicate($email, $phone)) {
+            $_SESSION['error'] = "Email atau nomor telepon sudah digunakan oleh pengguna lain!";
+            return false;
+        }
+    
         // Update data di database
-        $query = "UPDATE users SET fullname='$fullname', phone='$phone', email='$email', address='$address' WHERE id='$this->user_id'";
+        $query = "
+            UPDATE users 
+            SET fullname='$fullname', phone='$phone', email='$email', address='$address' 
+            WHERE id='$this->user_id'
+        ";
         if (mysqli_query($this->conn, $query)) {
             // Perbarui session dengan nama lengkap terbaru
             $_SESSION['user_name'] = $fullname;
@@ -54,6 +64,24 @@ class Profile {
             $_SESSION['error'] = "Terjadi kesalahan saat menyimpan perubahan.";
             return false;
         }
+    }    
+
+    // Cek apakah email atau nomor telepon sudah terdaftar pada pengguna lain
+    public function checkDuplicate($email, $phone) {
+        $query = "
+            SELECT id 
+            FROM users 
+            WHERE (email = '$email' OR phone = '$phone') 
+            AND id != '$this->user_id'
+        ";
+        $result = mysqli_query($this->conn, $query);
+
+        // Jika ada data lain dengan email atau nomor telepon yang sama, kembalikan false
+        if ($result && mysqli_num_rows($result) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     // Menampilkan pesan error atau success

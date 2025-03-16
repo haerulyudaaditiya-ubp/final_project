@@ -78,8 +78,24 @@ class UserRegistration {
         $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
 
         // Query untuk menyimpan data ke database
-        $query = "INSERT INTO users (fullname, phone, email, address, password, role) 
-                  VALUES ('$this->fullname', '$this->phone', '$this->email', '$this->address', '$hashedPassword', 'user')";
+        $query = "
+            INSERT INTO users (
+                fullname, 
+                phone, 
+                email, 
+                address, 
+                password, 
+                role
+            ) 
+            VALUES (
+                '$this->fullname', 
+                '$this->phone', 
+                '$this->email', 
+                '$this->address', 
+                '$hashedPassword', 
+                'user'
+            )
+        ";
 
         if (mysqli_query($this->conn, $query)) {
             return true;

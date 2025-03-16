@@ -6,10 +6,26 @@ require 'config/config.php'; // Koneksi database
 $filter_brand = isset($_GET['filter_brand']) ? $_GET['filter_brand'] : 'all';
 $sort_option = isset($_GET['sort_option']) ? $_GET['sort_option'] : '';
 
-// Query dasar
-$sql = "SELECT car_id, model, brand, year, transmission, image, price_24_hours, status FROM cars";
+// Ambil daftar merek mobil unik
+$brand_query = "SELECT DISTINCT brand FROM cars";
+$brand_result = mysqli_query($conn, $brand_query);
 
-// Filter berdasarkan brand
+// Ambil data mobil
+$sql = "
+    SELECT 
+        car_id, 
+        model, 
+        brand, 
+        year, 
+        transmission, 
+        image, 
+        price_24_hours, 
+        status 
+    FROM 
+        cars
+";
+
+// Filter berdasarkan merek
 if ($filter_brand !== 'all') {
     $sql .= " WHERE brand = '$filter_brand'";
 }
@@ -32,23 +48,31 @@ $result = mysqli_query($conn, $sql);
   
   <!-- Filter dan Sortir -->
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4" style="animation: fadeUp 1s 0.2s;">
-    <div class="mb-3 mb-md-0">
-        <a href="?filter_brand=all" class="btn <?php echo $filter_brand === 'all' ? 'btn-warning' : 'btn-outline-secondary'; ?> shadow-sm mx-1">All Mobil</a>
-        <a href="?filter_brand=Toyota" class="btn <?php echo $filter_brand === 'Toyota' ? 'btn-warning' : 'btn-outline-secondary'; ?> shadow-sm mx-1">Toyota</a>
-        <a href="?filter_brand=Daihatsu" class="btn <?php echo $filter_brand === 'Daihatsu' ? 'btn-warning' : 'btn-outline-secondary'; ?> shadow-sm mx-1">Daihatsu</a>
-    </div>
     <div>
-          <form method="GET" class="d-flex align-items-center">
-              <!-- Kirim filter_brand saat sortir -->
-              <input type="hidden" name="filter_brand" value="<?php echo $filter_brand; ?>">
-              <select name="sort_option" class="form-select shadow-sm" style="width: 200px;" onchange="this.form.submit()">
-                  <option value="" disabled selected>Urutkan</option>
-                  <option value="name" <?php echo $sort_option === 'name' ? 'selected' : ''; ?>>Nama</option>
-                  <option value="low_to_high" <?php echo $sort_option === 'low_to_high' ? 'selected' : ''; ?>>Harga: Rendah ke Tinggi</option>
-                  <option value="high_to_low" <?php echo $sort_option === 'high_to_low' ? 'selected' : ''; ?>>Harga: Tinggi ke Rendah</option>
-              </select>
-          </form>
-      </div>
+      <form method="GET" class="d-flex align-items-center">
+          <!-- Dropdown Filter Merek -->
+          <select name="filter_brand" class="form-select shadow-sm me-2" style="width: 200px;" onchange="this.form.submit()">
+              <option value="all" <?php echo $filter_brand === 'all' ? 'selected' : ''; ?>>Semua Mobil</option>
+              <?php 
+              if ($brand_result && mysqli_num_rows($brand_result) > 0) {
+                  while ($brand_row = mysqli_fetch_assoc($brand_result)) {
+                      $brand = $brand_row['brand'];
+                      $selected = $filter_brand === $brand ? 'selected' : '';
+                      echo "<option value='$brand' $selected>$brand</option>";
+                  }
+              }
+              ?>
+          </select>
+          
+          <!-- Dropdown Sortir -->
+          <select name="sort_option" class="form-select shadow-sm" style="width: 200px;" onchange="this.form.submit()">
+              <option value="" disabled <?php echo empty($sort_option) ? 'selected' : ''; ?>>Urutkan</option>
+              <option value="name" <?php echo $sort_option === 'name' ? 'selected' : ''; ?>>Nama</option>
+              <option value="low_to_high" <?php echo $sort_option === 'low_to_high' ? 'selected' : ''; ?>>Harga: Rendah ke Tinggi</option>
+              <option value="high_to_low" <?php echo $sort_option === 'high_to_low' ? 'selected' : ''; ?>>Harga: Tinggi ke Rendah</option>
+          </select>
+      </form>
+    </div>
   </div>
   
   <!-- Daftar Mobil -->

@@ -25,7 +25,16 @@
               <tbody>
                 <?php 
                 $no = 0;
-                $sql = "SELECT car_id, model, brand, year, transmission, image, price_24_hours, status FROM cars";
+                // Ambil data mobil
+                $sql = "SELECT car_id,
+                            model,
+                            brand,
+                            year,
+                            transmission,
+                            image,
+                            price_24_hours,
+                            status
+                        FROM cars";
                 $result = mysqli_query($conn, $sql);
                 while($row = mysqli_fetch_assoc($result)){
                   $no++;

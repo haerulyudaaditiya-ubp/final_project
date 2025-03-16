@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $brand = $_POST['brand'];
     $year = intval($_POST['year']);
     $transmission = $_POST['transmission'];
-    $price_12_hours = floatval($_POST['price_12_hours']);
     $price_24_hours = floatval($_POST['price_24_hours']);
     $status = $_POST['status'];
 
@@ -113,19 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Query untuk menyimpan data mobil
-    $query = "INSERT INTO cars (model, brand, year, transmission, price_12_hours, price_24_hours, status, image)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "
+        INSERT INTO cars (
+            model, 
+            brand, 
+            year, 
+            transmission,  
+            price_24_hours, 
+            status, 
+            image
+        ) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ";
 
     // Cek jika $image null, maka tidak usah mengikat parameter untuk gambar
     if ($image !== null) {
         $stmt = $conn->prepare($query);
         $stmt->bind_param(
-            "ssisddss",
+            "ssisdss",
             $model,
             $brand,
             $year,
             $transmission,
-            $price_12_hours,
             $price_24_hours,
             $status,
             $image
@@ -134,12 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Jika tidak ada gambar, set $image menjadi null
         $stmt = $conn->prepare($query);
         $stmt->bind_param(
-            "ssisdds",
+            "ssisds",
             $model,
             $brand,
             $year,
             $transmission,
-            $price_12_hours,
             $price_24_hours,
             $status,
             $image

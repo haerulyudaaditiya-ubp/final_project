@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 session_start();
 
@@ -17,6 +15,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 }
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
 <?php include('header.php'); ?>
 <?php include('../config/config.php'); ?>
 <body class="hold-transition sidebar-mini layout-fixed">

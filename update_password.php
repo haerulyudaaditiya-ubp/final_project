@@ -40,6 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update password
             if ($updatePassword->updatePassword()) {
                 $success_message = $updatePassword->success;
+
+                session_unset(); // Hapus semua variabel sesi
+                session_destroy(); // Hapus sesi
                 echo "<script>
                     setTimeout(function() {
                         window.location.href = 'forms/login.php';

@@ -31,6 +31,9 @@
                     case 'detail-pengembalian':
                         echo 'Detail Pengembalian';
                         break;
+                    case 'detail-laporan':
+                        echo 'Detail Laporan';
+                        break;
                     case 'tambah-mobil':
                         echo 'Tambah Mobil';
                         break;

@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['transfer_receipt']) 
 
 // Proses pembatalan pemesanan
 if (isset($_POST['cancel_order'])) {
-    // Update status pembatalan di tabel rentals
+    // Update status pembatalan di tabel rentals dan payments
     $cancel_query_rentals = "UPDATE rentals SET payment_status = 'failed' WHERE order_id = '$order_id' AND user_id = '$user_id'";
     $cancel_query_payments = "UPDATE payments SET payment_status = 'failed' WHERE order_id = '$order_id'";
 

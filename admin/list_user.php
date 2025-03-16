@@ -21,32 +21,31 @@
                 </tr>
               </thead>
               <tbody>
-                <?php 
+                <?php
                 $no = 0;
-                $sql = "SELECT id, fullname, phone, email, address, status FROM users";
+                $admin_id = $_SESSION['user_id']; // Ambil ID admin yang login
+                $sql = "SELECT id, fullname, phone, email, address, status FROM users WHERE id != $admin_id";
                 $result = mysqli_query($conn, $sql);
-                while($row = mysqli_fetch_assoc($result)){
+                while ($row = mysqli_fetch_assoc($result)) {
                   $no++;
                 ?>
-                <tr>
-                  <td><?php echo $no; ?></td>
-                  <td><?php echo $row['fullname']; ?></td>
-                  <td><?php echo $row['phone']; ?></td>
-                  <td><?php echo $row['email']; ?></td>
-                  <td><?php echo $row['address']; ?></td>
-                  <td class="no-print">
-                    <?php if ($row['status'] == 'aktif') { ?>
-                      <!-- Tombol Nonaktifkan -->
-                      <a onclick="ubah_status(<?php echo $row['id']; ?>, 'nonaktif')" class="btn btn-sm btn-danger">Nonaktifkan</a>
-                    <?php } else { ?>
-                      <!-- Tombol Aktifkan -->
-                      <a onclick="ubah_status(<?php echo $row['id']; ?>, 'aktif')" class="btn btn-sm btn-success">Aktifkan</a>
-                    <?php } ?>
-                  </td>
-                </tr>
+                  <tr>
+                    <td><?php echo $no; ?></td>
+                    <td><?php echo $row['fullname']; ?></td>
+                    <td><?php echo $row['phone']; ?></td>
+                    <td><?php echo $row['email']; ?></td>
+                    <td><?php echo $row['address']; ?></td>
+                    <td class="no-print">
+                      <?php if ($row['status'] == 'aktif') { ?>
+                        <a onclick="ubah_status(<?php echo $row['id']; ?>, 'nonaktif')" class="btn btn-sm btn-danger">Nonaktifkan</a>
+                      <?php } else { ?>
+                        <a onclick="ubah_status(<?php echo $row['id']; ?>, 'aktif')" class="btn btn-sm btn-success">Aktifkan</a>
+                      <?php } ?>
+                    </td>
+                  </tr>
                 <?php } ?>
               </tbody>
-              
+
             </table>
           </div>
           <!-- /.card-body -->
@@ -72,12 +71,18 @@
       confirmButtonText: "Ya, ubah!"
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Berhasil!",
-          text: "Status user telah diperbarui.",
-          icon: "success"
-        });
-        window.location = ("update/update_user_status.php?id=" + user_id + "&status=" + status);
+        // AJAX call ke backend
+        fetch("update/update_user_status.php?id=" + user_id + "&status=" + status)
+          .then(response => response.text())
+          .then(data => {
+            Swal.fire({
+              title: "Berhasil!",
+              text: "Status user telah diperbarui.",
+              icon: "success"
+            }).then(() => {
+              window.location.reload(); // Reload halaman agar data update
+            });
+          });
       }
     });
   }

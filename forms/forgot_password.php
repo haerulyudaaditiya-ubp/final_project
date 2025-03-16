@@ -19,19 +19,20 @@ $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__)); // Menggunakan direk
 $dotenv->load();
 
 // Inisialisasi variabel
-$error = '';
-$success = '';
+$error = $_SESSION['error'] ?? '';
+$success = $_SESSION['success'] ?? '';
+unset($_SESSION['error'], $_SESSION['success']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
 
     // Validasi input kosong
     if (empty($email)) {
-        $error = "Email wajib diisi!";
+        $_SESSION['error'] = "Email wajib diisi!";
     } else {
         // Validasi format email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Format email tidak valid!";
+            $_SESSION['error'] = "Format email tidak valid!";
         } else {
             // Periksa apakah email ada di database
             $query = "SELECT * FROM users WHERE email = '$email' AND status = 'aktif'";
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Lanjutkan dengan proses reset password
                 $reset_token = bin2hex(random_bytes(32)); // Buat token unik
-                $reset_link = "http://localhost/final_project/forms/reset_password.php?token=" . $reset_token;
+                $reset_link = "https://wejeatrans.my.id/forms/reset_password.php?token=" . $reset_token;
 
                 // Simpan token dan waktu kedaluwarsa ke database
                 $update_query = "UPDATE users SET reset_token = '$reset_token', reset_token_expire = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE email = '$email'";
@@ -54,17 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     try {
                         // Konfigurasi SMTP
                         $mail->isSMTP();
-                        $mail->Host = $_ENV['SMTP_HOST']; // Diambil dari .env
+                        $mail->Host = $_ENV['SMTP_HOST'];
                         $mail->SMTPAuth = true;
-                        $mail->Username = $_ENV['SMTP_USER']; // Diambil dari .env
-                        $mail->Password = $_ENV['SMTP_PASS']; // Diambil dari .env
+                        $mail->Username = $_ENV['SMTP_USER'];
+                        $mail->Password = $_ENV['SMTP_PASS'];
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = $_ENV['SMTP_PORT']; // Diambil dari .env
+                        $mail->Port = $_ENV['SMTP_PORT'];
 
                         // Informasi pengirim
-                        $mail->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['SMTP_FROM_NAME']); // Email dan nama pengirim dari .env
-                        $mail->addReplyTo($_ENV['SMTP_REPLY_TO'], 'No Reply'); // Reply-To, jika diperlukan, diambil dari .env
-                        $mail->addAddress($email); // Email penerima
+                        $mail->setFrom($_ENV['SMTP_FROM_EMAIL'], $_ENV['SMTP_FROM_NAME']);
+                        $mail->addReplyTo($_ENV['SMTP_REPLY_TO'], 'No Reply');
+                        $mail->addAddress($email);
 
                         // Konten email
                         $mail->isHTML(true);
@@ -77,18 +78,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <p>Email ini dikirim secara otomatis. Mohon untuk tidak membalas email ini.</p>
                         ";
                         $mail->send();
-                        $success = "Kami telah mengirimkan link reset password ke email Anda!";
+                        $_SESSION['success'] = "Kami telah mengirimkan link reset password ke email Anda!";
                     } catch (Exception $e) {
-                        $error = "Email gagal dikirim. Error: {$mail->ErrorInfo}";
+                        $_SESSION['error'] = "Email gagal dikirim. Error: {$mail->ErrorInfo}";
                     }
                 } else {
-                    $error = "Terjadi kesalahan saat memproses permintaan reset password.";
+                    $_SESSION['error'] = "Terjadi kesalahan saat memproses permintaan reset password.";
                 }
             } else {
-                $error = "Email tidak ditemukan atau akun Anda tidak aktif.";
+                $_SESSION['error'] = "Email tidak ditemukan atau akun Anda tidak aktif.";
             }
         }
     }
+
+    // Redirect untuk mencegah pengiriman ulang
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
 }
 
 // Tutup koneksi
