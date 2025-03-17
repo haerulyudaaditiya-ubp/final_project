@@ -30,10 +30,10 @@ require 'includes/header.php'; // Memanggil header
           </li>
           <li class="mb-3">
             <strong>WhatsApp:</strong><br>
-            <a href="https://wa.me/6289609317309?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil." 
+            <a href="https://wa.me/6281284409311?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil." 
               target="_blank" 
               style="text-decoration: none; color: #f39c12;">
-              +62 896-0931-7309
+              +62 812-8440-9311
             </a>
           </li>
         </ul>

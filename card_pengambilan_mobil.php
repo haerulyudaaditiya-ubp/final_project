@@ -14,10 +14,10 @@
                     </ul>
 
                     <p>Jika ada pertanyaan lebih lanjut, hubungi customer service kami di 
-                        <a href="https://wa.me/6289609317309?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
+                        <a href="https://wa.me/6281284409311?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
                             target="_blank"
                             style="color: #000000; text-decoration: none;"">
-                            <strong>089609317309</strong>
+                            <strong>081284409311</strong>
                         </a>
                         atau email ke 
                         <a href="mailto:Wejeatrans@gmail.com" 

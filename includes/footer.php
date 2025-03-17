@@ -29,7 +29,7 @@
         <p>Ikuti kami di media sosial untuk mendapatkan penawaran terbaik dan informasi terbaru!</p>
         <div class="d-flex align-items-start gap-3 flex-column">
           <!-- WhatsApp -->
-          <a href="https://wa.me/6289609317309?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
+          <a href="https://wa.me/6281284409311?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
             target="_blank"
             class="d-flex align-items-center text-white text-decoration-none gap-2">
             <i class="fab fa-whatsapp fs-4"></i>
@@ -60,7 +60,7 @@
 </footer>
 
 <!-- WhatsApp Floating Icon -->
-<a href="https://wa.me/6289609317309?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
+<a href="https://wa.me/6281284409311?text=Halo%20Wejea%20Trans,%20saya%20ingin%20bertanya%20tentang%20layanan%20rental%20mobil."
    target="_blank"
    class="whatsapp-floating-icon">
    <i class="fab fa-whatsapp"></i>
